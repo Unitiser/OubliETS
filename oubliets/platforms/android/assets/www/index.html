@@ -37,11 +37,15 @@
     </head>
     <body>
         <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
+            <h1>oubliETS</h1>
+			<input name="room-name" type="text" placeholder="Room name" />
+			<select>
+				<option value="type-info">Informatique</option>
+				<option value="type-class">Classe</option>
+			</select>
+			<input name="start-time" type="text" placeholder="Start time" />
+			<input name="end-time" type="text" placeholder="End time" />
+			<input name="resource" type="text" placeholder="Ressource" />
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
