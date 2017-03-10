@@ -49,16 +49,40 @@ function addRoomResource(room_name, ressource_name){
             [room_name, ressource_name]);
 }
 
-// Link a root to a time slot
-function addRoomTimeslot(room_name, timeslot){
-    var ts = timeslot.split('-');
-    db.run(`insert into room_timeslot (idRoom, idTimeslot)
+// Link a room to a time slot
+function addRoomTimeslot(room_name, ts){
+    // Parse the time slot string using regex
+    var [ts, day, start, end ] = new RegExp(/([a-z]{3}) ([\d]{1,2})-([\d]{1,2})/g).exec(ts);
+
+    // Add an entry for each timeslot in the range
+    _.each(_.range(start, end), 
+            (s) => { db.run(`insert into room_timeslot (idRoom, idTimeslot)
                 values ((select idRoom from rooms where name = ?),
-                        (select idTimeslot from timeslots where startTime = ? and endTime = ?))`, 
-            [room_name, ts[0], ts[1]]);
+                        (select idTimeslot from timeslots where startTime = ? and day = ?))`, 
+            [room_name, s, days[day]]) });
 }
 
 // Mock data
+
+// Map for days of the week to ID
+// 0. Sunday - Sun.    
+// 1. Monday - Mon.
+// 2. Tuesday - Tue.
+// 3. Wednesday - Wed.
+// 4. Thursday - Thu.
+// 5. Friday - Fri.
+// 6. Saturday - Sat.
+var days = {
+    sun : 0,
+    mon : 1,
+    tue : 2,
+    wed : 3,
+    thu : 4,
+    fri : 5,
+    sat : 6
+}
+
+
 var ressources = [{
     name: 'computer'
 },{
@@ -69,11 +93,21 @@ var rooms = [{
     name: 'A1234',
     type: 'classroom',
     ressources: ['whiteboard'],
-    timeslots: ['8-9', '12-13']
+    timeslots: ['wed 8-9', ' fri 12-13']
 },{
     name: 'A3456',
     type: 'lab',
     ressources: ['computer', 'whiteboard'],
-    timeslots: ['11-12', '21-22']
+    timeslots: ['mon 11-12', 'tue 21-24']
+},{
+    name: 'B1234',
+    type: 'classroom',
+    ressources: ['whiteboard'],
+    timeslots: ['thu 12-13', ' fri 12-13']
+},{
+    name: 'C2234',
+    type: 'lab',
+    ressources: ['computer'],
+    timeslots: ['sat 8-14']
 }];
 
