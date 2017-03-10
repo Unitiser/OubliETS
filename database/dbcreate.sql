@@ -9,13 +9,13 @@ drop table if exists log;
 -- Create the tables
 create table rooms (
     idRoom integer PRIMARY KEY, 
-    name test NOT NULL, 
-    type test NOT NULL
+    name text NOT NULL, 
+    type text NOT NULL
 );
 
 create table ressources (
     idRessource integer PRIMARY KEY, 
-    name test NOT NULL
+    name text NOT NULL
 );
 
 create table room_ressource (
@@ -27,18 +27,18 @@ create table room_ressource (
 );
 
 create table timeslots (
-    idTimeslots integer primary key,
+    idTimeslot integer primary key,
     day integer not null,
     startTime integer not null,
     endTime integer not null
 );
 
 create table room_timeslot(
-    idTimeslots integer not null, 
+    idTimeslot integer not null, 
     idRoom integer not null,
-    foreign key (idTimeslots) references timeslots(idTimeslots),
+    foreign key (idTimeslot) references timeslots(idTimeslot),
     foreign key (idRoom) references rooms(idRoom),
-    primary key (idTimeslots, idRoom)
+    primary key (idTimeslot, idRoom)
 );
 
 create table log(
