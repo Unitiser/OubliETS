@@ -1,0 +1,21 @@
+{
+  "name": "populetsor",
+  "version": "1.0.0",
+  "description": "Populate sample data to sqlite data base.",
+  "main": "dummy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dummy.js"
+  },
+  "keywords": [
+    "mocks",
+    "sqlite",
+    "profits"
+  ],
+  "author": "Nicolas Cusson et Al",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "sqlite3": "3.1.8"
+  }
+}
