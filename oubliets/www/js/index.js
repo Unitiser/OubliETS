@@ -28,18 +28,37 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
+
+        // Open database
+        var db = window.sqlitePlugin.openDatabase({name: 'dispo.db', location: 'default'});
+        this.searchService = new SearchService(db);
+
+        // Hookup functionalities
+        $('[name="button-search"]').click(this.searchHandler.bind(this));
     },
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+        // var parentElement = document.getElementById(id);
+        // var listeningElement = parentElement.querySelector('.listening');
+        // var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+        // listeningElement.setAttribute('style', 'display:none;');
+        // receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+    },
+
+    searchHandler: function(event){
+        var getInputValue = function(name){ return $(`[name="${name}"]`).val(); };
+        var inputs = ['room-name', 'start-time', 'end-time', 'room-type', 'resource'];
+        var params = {};
+        inputs.forEach((name) => {
+            var value = getInputValue(name);
+            if(value) params[name] = value;
+        } );
+
+        this.searchService.find(params);
     }
 };
 
