@@ -16,6 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+import "babel-polyfill";
+import {SqliteService} from './sqlite.service';
+import {SearchService} from './search.service';
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -27,19 +32,24 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+        this.sqliteService = new SqliteService('dispo.db');
+        this.searchService = new SearchService(this.sqliteService);
+
+
+        // Hookup functionalities
+        $('[name="button-search"]').click(this.searchHandler.bind(this));
     },
 
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+    searchHandler: function(event){
+        var getInputValue = function(name){ return $(`[name="${name}"]`).val(); };
+        var inputs = ['room-name', 'start-time', 'end-time', 'room-type', 'resource'];
+        var params = {};
+        inputs.forEach((name) => {
+            var value = getInputValue(name);
+            if(value) params[name] = value;
+        } );
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
+        this.searchService.find(params);
     }
 };
 
