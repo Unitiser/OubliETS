@@ -1,63 +1,113 @@
 <!DOCTYPE html>
 <!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
 -->
 <html>
-    <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-		<link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Oubli&Eacute;TS</title>
-    </head>
-    <body>
-        <div class="app">
-            <div class="row">
-                <div class="logo"></div>
-            </div>
+<head>
+  <!--
+  Customize this policy to fit your own app's needs. For more guidance, see:
+  https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+  Some notes:
+  * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+  * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+  * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+  * Enable inline JS: add 'unsafe-inline' to default-src
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<link rel="stylesheet" type="text/css" href="css/normalize.css">
+<link rel="stylesheet" type="text/css" href="css/skeleton.css">
+<link rel="stylesheet" type="text/css" href="css/navbar.css">
+<link rel="stylesheet" type="text/css" href="css/custom.css">
+<title>Oubli&Eacute;TS</title>
+</head>
+<body>
+  <div class="app">
+    <div class="navbar">
+      <ul class="navbar-list">
+        <!-- <li class="navbar-item"><img class="logo" src="img/logo_horizontal.png"</li> -->
+        <li class="navbar-item"><a href="#search">Recherche</a></li>
+        <li class="navbar-item"><a href="#favorites">Favoris</a></li>
+        <li class="navbar-item"><a href="#history">Historique</a></li>
+      </ul>
+    </div>
 
-            <div class="row">
-                <div class="search-widget">
-        			<input name="room-name" type="text" placeholder="Room name" />
-        			<select name="room-type">
-        				<option value="lab">Informatique</option>
-        				<option value="classroom">Classe</option>
-        			</select>
-        			<input name="start-time" type="text" placeholder="Start time" />
-        			<input name="end-time" type="text" placeholder="End time" />
-        			<input name="resource" type="text" placeholder="Ressource" />
-        			<button name="button-search" type="submit">Search</button>
-                </div>
-            </div>
-            <div id="results"> </div>
+    <div class="container">
+      <!-- Local search -->
+      <div class="row">
+        <h1>Recherche de locaux</h1>
+      </div>
+
+      <div class="row">
+        <label>Local</label>
+        <input name="room-name" type="text" placeholder="Room name" />
+      </div>
+      <div class="row">
+        <label>Type de pièce</label>
+        <select name="room-type">
+          <option value="lab">Informatique</option>
+          <option value="classroom">Classe</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="six columns">
+          <label>Début</label>
+          <input name="start-time" type="text" placeholder="Start time" />
         </div>
-        <script type="text/javascript" src="js/lib/jquery-3.1.1.min.js"></script>
-		<script type="text/javascript" src="js/bundle.js"></script>
-        <script type="text/javascript" src="cordova.js"></script>
-    </body>
+        <div class="six columns">
+          <label>Fin</label>
+          <input name="end-time" type="text" placeholder="End time" />
+        </div>
+      </div>
+      <div class="row">
+        <label>Ressources nécessaires</label>
+        <!-- <input name="resource" type="text" placeholder="Ressource" /> -->
+      </div>
+      <div class="row">
+        <label>Logiciels nécessaires</label>
+        <!-- <input name="resource" type="text" placeholder="Ressource" /> -->
+      </div>
+      <div class="row">
+        <button name="button-search" type="submit">Search</button>
+      </div>
+      <div>
+        <h2>Résultats</h2>
+        <div id="results"> </div>
+      </div>
+
+      <!-- Favorites -->
+      <div class="row">
+        <h1>Favoris</h1>
+        <div id="favorites"> </div>
+      </div>
+
+      <!-- History -->
+      <div class="row">
+        <h1>Historique</h1>
+        <div id="history"> </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/lib/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="js/bundle.js"></script>
+  <script type="text/javascript" src="cordova.js"></script>
+</body>
 </html>

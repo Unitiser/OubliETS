@@ -1,0 +1,17 @@
+h1 {
+  font-weight: bolder;
+  font-size: 120%;
+  color: white;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 110%;
+  color: white;
+}
+
+label {
+  text-align: left;
+  color: white;
+  font-size: 100%;
+}
