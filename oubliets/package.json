@@ -7,6 +7,7 @@
     "emulator": "npm run webpack && cordova run --emulator",
     "device": "npm run webpack && cordova run --device",
     "webpack": "webpack",
+    "linter": "jshint src/js/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -16,6 +17,7 @@
     "babel-loader": "^6.4.0",
     "babel-preset-env": "^1.2.1",
     "copy-webpack-plugin": "^4.0.1",
+    "jshint": "^2.9.4",
     "webpack": "^2.2.1"
   },
   "dependencies": {

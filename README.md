@@ -7,7 +7,7 @@ npm install -g cordova
 ```
 
 2) Intaller le SDK et installer la plateform désiré
-Ex pour android: 
+Ex pour android:
 Installer le Android SDK standalone a partir de https://developer.android.com/studio/index.html
 Ajouter android comme plateform dans cordova
 ```
@@ -35,3 +35,8 @@ cd database
 npm install
 npm start
 ```
+
+## Standard de programmation
+
+1. Utilisation de [editor config](editor-config.org)
+2. Utilisation du linter `npm run linter` dans le dossier 'oubliets/'
