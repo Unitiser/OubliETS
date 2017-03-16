@@ -31,6 +31,7 @@ create table timeslots (
     day integer not null,
     startTime integer not null,
     endTime integer not null
+    UNIQUE (day, startTime, endTime) ON CONFLICT IGNORE
 );
 
 create table room_timeslot(

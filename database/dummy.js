@@ -54,12 +54,15 @@ function addRoomTimeslot(room_name, ts){
     // Parse the time slot string using regex
     var [ts, day, start, end ] = new RegExp(/([a-z]{3}) ([\d]{1,2})-([\d]{1,2})/g).exec(ts);
 
-    // Add an entry for each timeslot in the range
-    _.each(_.range(start, end), 
-            (s) => { db.run(`insert into room_timeslot (idRoom, idTimeslot)
-                values ((select idRoom from rooms where name = ?),
-                        (select idTimeslot from timeslots where startTime = ? and day = ?))`, 
-            [room_name, s, days[day]]) });
+    createTimeRange(days[day], start, end);
+	db.run(`insert into timeslots (day, startTime, endTime) values (?, ?, ?)`, [days[day], start, end],
+		(err) => {
+		    db.run(`insert into room_timeslot (idRoom, idTimeslot)
+		                values ((select idRoom from rooms where name = ?),
+		                        (select idTimeslot from timeslots where day = ? and startTime = ? and endTime = ?))`,
+		            [room_name, days[day], start, end])
+		}
+	)
 }
 
 // Mock data
@@ -93,17 +96,22 @@ var rooms = [{
     name: 'A1234',
     type: 'classroom',
     ressources: ['whiteboard'],
-    timeslots: ['wed 8-9', ' fri 12-13']
+    timeslots: ['wed 8-9', ' fri 10-13']
+},{
+    name: 'E3457',
+    type: 'lab',
+    ressources: ['computer', 'whiteboard'],
+    timeslots: ['mon 11-12', 'tue 20-24', 'mon 15-18']
 },{
     name: 'A3456',
     type: 'lab',
     ressources: ['computer', 'whiteboard'],
-    timeslots: ['mon 11-12', 'tue 21-24']
+    timeslots: ['mon 11-14', 'tue 20-22', 'mon 15-19']
 },{
     name: 'B1234',
     type: 'classroom',
     ressources: ['whiteboard'],
-    timeslots: ['thu 12-13', ' fri 12-13']
+    timeslots: ['thu 11-13', ' fri 12-13']
 },{
     name: 'C2234',
     type: 'lab',
