@@ -29,6 +29,7 @@ var app = {
 
 		this.sqliteService.ready().then(() => {
 			this.searchService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
+			this.searchService.findResources().then((res) => { ViewController.fillResources(res)})
 		})
 
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
@@ -50,7 +51,7 @@ var app = {
 			if(value) params[name] = value
 		});
 
-		var inputsArray = ['accesses'] // We could merge with inputs.forEach function someday
+		var inputsArray = ['accesses', 'resources'] // We could merge with inputs.forEach function someday
 		inputsArray.forEach((name) => {
 			var values = getInputArray(name)
 			if(values) params[name] = values

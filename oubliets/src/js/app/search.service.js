@@ -26,45 +26,61 @@ export class SearchService {
 		return this.sqliteService.run(`select distinct access from rooms`, [])
 	}
 
+	findResources() {
+		return this.sqliteService.run(`select * from ressources`, [])
+	}
+
 	find(params) {
 		var self = this
 		// TODO: This way of building the query is quite horrible ... we should probably find something better.
-		var select = `select r.idRoom, r.name, r.type, t.day, t.startTime, t.endTime from rooms as r
+		var select = `select r.idRoom, r.name, r.type, t.day, t.startTime, t.endTime, group_concat(re.name) as res from rooms as r
 			left join room_timeslot as rt on r.idRoom = rt.idRoom
 			left join timeslots as t on t.idTimeslot = rt.idTimeslot
 			left join room_ressource as rr on rr.idRoom = r.idRoom
 			left join ressources as re on rr.idRessource = re.idRessource `
-		var where = `where `
-		var wheres = []
+		var having = ` having `
+		var havings = []
+		var groupBy = ` group by r.name, t.day, t.startTime, t.endTime`
 
 		$.each(params, function(key, values) {
-			let clause
-			let fieldInfo = self.getRealSearchField(key)
-			if (fieldInfo.type != undefined && fieldInfo.type == 'array') {
-				let c = []
-				$(values).each((i, val) => {
-					c.push(`${fieldInfo.field} ${fieldInfo.operator} "${val}"`)
-				})
-
-				if (c.length !== 0) {
-					clause = '(' + c.join(' ' + fieldInfo.arrayOperator + ' ') + ')'
-				}
-
-			} else {
-				clause = `${fieldInfo.field} ${fieldInfo.operator} "${values}" `
-			}
-			if (clause) wheres.push(clause)
+			let clause = self.getParamClause(self.getRealSearchField(key), values)
+			if (clause) havings.push(clause)
 			console.log(key, values)
 		});
-		var query = select + (wheres.length ? where + wheres.join(' and ') : "")
+		var query = select + groupBy + (havings.length ? having + havings.join(' and '): "")
 		console.log(query);
 
 		return this.sqliteService.run(query, [])
 	}
 
+	getParamClause(fieldInfo, values) {
+		var getConditionClause = function(field, operator, value) {
+			let val = (operator === "LIKE") ? `"%${value}%"` : `"${value}"`
+			return `${field} ${operator} ` + val
+		}
+
+		let clause
+		if (fieldInfo.type != undefined && fieldInfo.type == 'array') {
+			let c = []
+			$(values).each((i, val) => {
+				c.push(getConditionClause(fieldInfo.field, fieldInfo.operator, val))
+			})
+
+			if (c.length !== 0) {
+				clause = '(' + c.join(' ' + fieldInfo.arrayOperator + ' ') + ')'
+			}
+
+		} else {
+			clause = getConditionClause(fieldInfo.field, fieldInfo.operator, values)
+		}
+		return clause
+	}
+
+
 	getRealSearchField(name){
 		let mapping = {
 			'accesses': { 'field' : 'r.access', 'operator' : '=', 'type': 'array', 'arrayOperator': 'or'}, // This is a proposition ... we should probably find something better.
+			'resources': { 'field' : 'res', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
 			'room-name' : { 'field' : 'r.name', 'operator' : '=' },
 			'start-time' : { 'field' : 't.startTime', 'operator' : '<=' },
 			'end-time' : { 'field' : 't.endTime', 'operator' : '>=' },

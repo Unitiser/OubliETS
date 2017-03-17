@@ -9,5 +9,10 @@ export var Labels = {
 		"all": "EG ou SEG ou autre ? :P",
 		"mecanical": "MEC"
 	},
+	resources: {
+		"television": "Télévision",
+		"computer": "Ordinateurs",
+		"whiteboard": "Tableau blanc"
+	},
     noResults : "No results found"
 }

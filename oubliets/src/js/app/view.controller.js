@@ -26,6 +26,12 @@ export class ViewController {
 		})
 	}
 
+	static fillResources(resources) {
+		$(resources).each((i, resource) => {
+			$('#resources').append(ViewController._createLabelAndCheckbox(resource.name, Labels.resources[resource.name]))
+		})
+	}
+
 	static _createLabelAndCheckbox(value, name) {
 		var id = name + "_" + value + "_" + Math.random().toString(36).substring(7);
 

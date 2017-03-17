@@ -89,6 +89,8 @@ var ressources = [{
     name: 'computer'
 },{
     name: 'whiteboard'
+},{
+    name: 'television'
 }];
 
 var rooms = [{
