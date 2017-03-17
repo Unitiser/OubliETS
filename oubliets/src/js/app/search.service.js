@@ -37,10 +37,24 @@ export class SearchService {
 		var where = `where `
 		var wheres = []
 
-		$.each(params, function(key, val) {
+		$.each(params, function(key, values) {
+			let clause
 			let fieldInfo = self.getRealSearchField(key)
-			wheres.push(`${fieldInfo.field} ${fieldInfo.operator} "${val}" `)
-			console.log(key, val)
+			if (fieldInfo.type != undefined && fieldInfo.type == 'array') {
+				let c = []
+				$(values).each((i, val) => {
+					c.push(`${fieldInfo.field} ${fieldInfo.operator} "${val}"`)
+				})
+
+				if (c.length !== 0) {
+					clause = '(' + c.join(' ' + fieldInfo.arrayOperator + ' ') + ')'
+				}
+
+			} else {
+				clause = `${fieldInfo.field} ${fieldInfo.operator} "${values}" `
+			}
+			if (clause) wheres.push(clause)
+			console.log(key, values)
 		});
 		var query = select + (wheres.length ? where + wheres.join(' and ') : "")
 		console.log(query);
@@ -50,6 +64,7 @@ export class SearchService {
 
 	getRealSearchField(name){
 		let mapping = {
+			'accesses': { 'field' : 'r.access', 'operator' : '=', 'type': 'array', 'arrayOperator': 'or'}, // This is a proposition ... we should probably find something better.
 			'room-name' : { 'field' : 'r.name', 'operator' : '=' },
 			'start-time' : { 'field' : 't.startTime', 'operator' : '<=' },
 			'end-time' : { 'field' : 't.endTime', 'operator' : '>=' },

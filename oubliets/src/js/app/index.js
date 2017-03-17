@@ -20,7 +20,7 @@ var app = {
 
 		ViewController.show("search");
 
-		// Hookup functionalities
+ 		// Hookup functionalities
 		$(".navbar-item a").click((event) => {
 			event.preventDefault();
 			let targetName = event.target.attributes.href.value.replace("#", "");
@@ -36,6 +36,13 @@ var app = {
 
 	searchHandler: function(event){
 		var getInputValue = function(name) { return $(`[name="${name}"]`).val() }
+		var getInputArray = function(name) {
+			let items = []
+			$(`#${name} :input:checked`).each(function () {
+				items.push(this.value)
+			})
+			return items
+		}
 		var inputs = ['room-name', 'day-of-week', 'start-time', 'end-time', 'room-type', 'resource']
 		var params = {}
 		inputs.forEach((name) => {
@@ -43,10 +50,16 @@ var app = {
 			if(value) params[name] = value
 		});
 
+		var inputsArray = ['accesses'] // We could merge with inputs.forEach function someday
+		inputsArray.forEach((name) => {
+			var values = getInputArray(name)
+			if(values) params[name] = values
+		})
+
 		this.searchService.find(params)
 			.then((res) => {
 				ViewController.renderSearchResults(res);
-				
+
 			}).catch((err) => {
 				console.log(err)
 			});
