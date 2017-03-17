@@ -32,7 +32,7 @@ var app = {
 
 	searchHandler: function(event){
 		var getInputValue = function(name) { return $(`[name="${name}"]`).val() }
-		var inputs = ['room-name', 'start-time', 'end-time', 'room-type', 'resource']
+		var inputs = ['room-name', 'day-of-week', 'start-time', 'end-time', 'room-type', 'resource']
 		var params = {}
 		inputs.forEach((name) => {
 			var value = getInputValue(name)

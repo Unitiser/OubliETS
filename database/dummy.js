@@ -54,7 +54,6 @@ function addRoomTimeslot(room_name, ts){
     // Parse the time slot string using regex
     var [ts, day, start, end ] = new RegExp(/([a-z]{3}) ([\d]{1,2})-([\d]{1,2})/g).exec(ts);
 
-    createTimeRange(days[day], start, end);
 	db.run(`insert into timeslots (day, startTime, endTime) values (?, ?, ?)`, [days[day], start, end],
 		(err) => {
 		    db.run(`insert into room_timeslot (idRoom, idTimeslot)

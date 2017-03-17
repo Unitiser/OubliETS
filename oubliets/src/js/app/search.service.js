@@ -51,6 +51,7 @@ export class SearchService {
 			'end-time' : { 'field' : 't.endTime', 'operator' : '>=' },
 			'resource' : { 'field' : 'rr.name', 'operator' : '=' },
 			'room-type' : { 'field' : 'r.type', 'operator' : '=' },
+			'day-of-week' : { 'field' : 't.day', 'operator' : '=' },
 		}
 		return mapping[name]
 	}

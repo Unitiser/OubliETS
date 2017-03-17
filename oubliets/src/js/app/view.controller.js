@@ -14,6 +14,7 @@ export class ViewController {
                 var now = new Date();
                 $('input[name=start-time]').val(now.getHours())
                 $('input[name=end-time]').val(now.getHours() + 1)
+			    $('select[name=day-of-week]').val(now.getDay())
             break;
         }
     }
