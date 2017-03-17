@@ -18,7 +18,24 @@ export class ViewController {
             break;
         }
     }
-    
+
+	static fillAccesses(accesses) {
+		$(accesses).each((i, access) => {
+			let a = access.access
+			$('#accesses').append(ViewController._createLabelAndCheckbox(a, Labels.accesses[a]))
+		})
+	}
+
+	static _createLabelAndCheckbox(value, name) {
+		var id = name + "_" + value + "_" + Math.random().toString(36).substring(7);
+
+		var span = $('<span></span>')
+		span.append('<label for="' + id + '">' + name + '</label>')
+		span.append('<input id="' + id + '" type="checkbox" value="' + value + '"/>')
+
+		return span
+	}
+
     static hideAll(){
         let views = ["search", "history", "results", "favorites"];
         $(views).each((i, v) => { $("#" + v).hide() });

@@ -22,6 +22,10 @@ export class SearchService {
 		this.sqliteService = sqliteService
 	}
 
+	findAccesses() {
+		return this.sqliteService.run(`select distinct access from rooms`, [])
+	}
+
 	find(params) {
 		var self = this
 		// TODO: This way of building the query is quite horrible ... we should probably find something better.

@@ -27,6 +27,10 @@ var app = {
 			ViewController.show(targetName);
 		});
 
+		this.sqliteService.ready().then(() => {
+			this.searchService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
+		})
+
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
 	},
 

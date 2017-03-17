@@ -30,7 +30,7 @@ function createTimeSlots(){
 
 // Create a new room
 function addRoom(r){
-    db.run(`insert into rooms (name, type) values (?, ?)`, [r.name, r.type], () => {
+    db.run(`insert into rooms (name, type, access) values (?, ?, ?)`, [r.name, r.type, r.access], () => {
         _.each(r.ressources, (ressource_name) => addRoomResource(r.name, ressource_name));
         _.each(r.timeslots, (ts) => addRoomTimeslot(r.name, ts));
     });
@@ -92,29 +92,45 @@ var ressources = [{
 }];
 
 var rooms = [{
+    name: 'A1600',
+    type: 'classroom',
+	access: 'all',
+    ressources: ['whiteboard'],
+    timeslots: ['sat 8-24', 'sun 8-24', 'fri 10-13']
+},{
+    name: 'Bibliotheque - salle de groupe',
+    type: 'classroom',
+	access: 'all',
+    ressources: ['whiteboard', 'television'],
+    timeslots: ['sat 8-19', 'sun 8-19', 'mon 8-22', 'fri 10-13']
+},{
     name: 'A1234',
     type: 'classroom',
+	access: 'all',
     ressources: ['whiteboard'],
-    timeslots: ['wed 8-9', ' fri 10-13']
+    timeslots: ['wed 8-9', 'fri 10-13']
 },{
     name: 'E3457',
     type: 'lab',
+	access: 'graduates',
     ressources: ['computer', 'whiteboard'],
     timeslots: ['mon 11-12', 'tue 20-24', 'mon 15-18']
 },{
     name: 'A3456',
     type: 'lab',
+	access: 'software-it',
     ressources: ['computer', 'whiteboard'],
     timeslots: ['mon 11-14', 'tue 20-22', 'mon 15-19']
 },{
     name: 'B1234',
     type: 'classroom',
+	access: 'software-it',
     ressources: ['whiteboard'],
     timeslots: ['thu 11-13', ' fri 12-13']
 },{
     name: 'C2234',
     type: 'lab',
+	access: 'mecanical',
     ressources: ['computer'],
     timeslots: ['sat 8-14']
 }];
-

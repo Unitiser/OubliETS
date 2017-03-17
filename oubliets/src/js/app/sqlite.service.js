@@ -28,11 +28,25 @@ export class SqliteService {
 	// Copy preset db file to default sqlite location
 	initDatabase(dbname) {
 		// Copy the prefilled db to the default location
+		var self = this
 		window.plugins.sqlDB.copy(dbname, 0, (success) => {
 			console.log("Initialised disponibility database.")
+			self._ready = true;
 		}, (error) => {
 			console.log("Database already exist.")
+			self._ready = true;
 		});
+	}
+
+	ready() {
+		var self = this
+		return new Promise(waitForReady)
+		function waitForReady(resolve, error) {
+			if (self._ready) {
+				return resolve()
+			}
+			setTimeout(waitForReady.bind(this, resolve, error), 50)
+		}
 	}
 
 	run(query, args = []) {
