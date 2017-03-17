@@ -1,6 +1,8 @@
 import "babel-polyfill"
 import {SqliteService} from './sqlite.service'
 import {SearchService} from './search.service'
+import {ViewController} from './view.controller'
+
 
 var app = {
 	// Application Constructor
@@ -16,8 +18,16 @@ var app = {
 		this.sqliteService = new SqliteService('dispo.db')
 		this.searchService = new SearchService(this.sqliteService)
 
+		ViewController.show("search");
+
 		// Hookup functionalities
-		$('[name="button-search"]').click(this.searchHandler.bind(this))
+		$(".navbar-item a").click((event) => {
+			event.preventDefault();
+			let targetName = event.target.attributes.href.value.replace("#", "");
+			ViewController.show(targetName);
+		});
+
+		$('[name="button-search"]').click(this.searchHandler.bind(this));
 	},
 
 	searchHandler: function(event){
@@ -30,6 +40,12 @@ var app = {
 		});
 
 		this.searchService.find(params)
+			.then((res) => {
+				ViewController.renderSearchResults(res);
+				
+			}).catch((err) => {
+				console.log(err)
+			});
 	}
 };
 

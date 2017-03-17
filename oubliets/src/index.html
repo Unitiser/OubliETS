@@ -17,7 +17,7 @@
 		<div class="navbar">
 			<ul class="navbar-list">
 				<!-- <li class="navbar-item"><img class="logo" src="img/logo_horizontal.png"</li> -->
-				<li class="navbar-item"><a href="#search">Recherche</a></li>
+				<li class="navbar-item active"><a href="#search">Recherche</a></li>
 				<li class="navbar-item"><a href="#favorites">Favoris</a></li>
 				<li class="navbar-item"><a href="#history">Historique</a></li>
 			</ul>
@@ -25,57 +25,60 @@
 
 		<div class="container">
 			<!-- Local search -->
-			<div class="row">
-				<h1>Recherche de locaux</h1>
-			</div>
-
-			<div class="row">
-				<label>Local</label>
-				<input name="room-name" type="text" placeholder="Room name" />
-			</div>
-			<div class="row">
-				<label>Type de pièce</label>
-				<select name="room-type">
-					<option value="lab">Informatique</option>
-					<option value="classroom">Classe</option>
-				</select>
-			</div>
-			<div class="row">
-				<div class="six columns">
-					<label>Début</label>
-					<input name="start-time" type="number" placeholder="Start time" />
+			<div id="search">
+				<div class="row">
+					<h1>Recherche de locaux</h1>
 				</div>
-				<div class="six columns">
-					<label>Fin</label>
-					<input name="end-time" type="number" placeholder="End time" />
+
+				<div class="row">
+					<label>Local</label>
+					<input name="room-name" type="text" placeholder="Room name" />
+				</div>
+				<div class="row">
+					<label>Type de pièce</label>
+					<select name="room-type">
+						<option value="">Type de pièce</option>
+						<option value="lab">Informatique</option>
+						<option value="classroom">Classe</option>
+					</select>
+				</div>
+				<div class="row">
+					<div class="six columns">
+						<label>Début</label>
+						<input name="start-time" type="number" placeholder="Start time" />
+					</div>
+					<div class="six columns">
+						<label>Fin</label>
+						<input name="end-time" type="number" placeholder="End time" />
+					</div>
+				</div>
+				<div class="row">
+					<label>Ressources nécessaires</label>
+					<!-- <input name="resource" type="text" placeholder="Ressource" /> -->
+				</div>
+				<div class="row">
+					<label>Logiciels nécessaires</label>
+					<!-- <input name="resource" type="text" placeholder="Ressource" /> -->
+				</div>
+				<div class="row">
+					<button name="button-search" type="submit">Search</button>
 				</div>
 			</div>
-			<div class="row">
-				<label>Ressources nécessaires</label>
-				<!-- <input name="resource" type="text" placeholder="Ressource" /> -->
-			</div>
-			<div class="row">
-				<label>Logiciels nécessaires</label>
-				<!-- <input name="resource" type="text" placeholder="Ressource" /> -->
-			</div>
-			<div class="row">
-				<button name="button-search" type="submit">Search</button>
-			</div>
-			<div>
-				<h2>Résultats</h2>
-				<div id="results"> </div>
-			</div>
-
+			
 			<!-- Favorites -->
-			<div class="row">
+			<div id="favorites" class="row">
 				<h1>Favoris</h1>
-				<div id="favorites"> </div>
+			</div>
+
+			<div id="results" class="row">
+				<h2>Résultats</h2>
+				<div id="results-list" class="row"> </div>
 			</div>
 
 			<!-- History -->
-			<div class="row">
+			<div id="history" class="row">
 				<h1>Historique</h1>
-				<div id="history"> </div>
+				<!-- <div id="history"> </div> -->
 			</div>
 		</div>
 	</div>

@@ -16,7 +16,6 @@
 //     left join timeslots as t on t.idTimeslot = rt.idTimeslot
 //     where t.startTime = 8
 //     group by r.idRoom;
-import {ResultsView} from './results.view'
 
 export class SearchService {
 	constructor(sqliteService) {
@@ -39,24 +38,10 @@ export class SearchService {
 			wheres.push(`${fieldInfo.field} ${fieldInfo.operator} "${val}" `)
 			console.log(key, val)
 		});
+		var query = select + (wheres.length ? where + wheres.join(' and ') : "")
+		console.log(query);
 
-		var query = select + where + wheres.join(' and ')
-
-		// TODO return promise
-		this.sqliteService.run(query, []) .then((res) => {
-			$("#results").empty()
-			if (res.length === 0) {
-				$("#results").append("<p>No results found</p>")
-			} else {
-				$.each(res, function(key, r) {
-					let div = $('<div class="result"></div>')
-					div.append(ResultsView.createResult(r.type, r.name, r.startTime, r.endTime))
-					$("#results").append(div)
-				})
-			}
-		}).catch((err) => {
-			console.log(err)
-		})
+		return this.sqliteService.run(query, [])
 	}
 
 	getRealSearchField(name){

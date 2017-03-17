@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "emulator": "npm run webpack && cordova run --emulator",
-    "emulatorw": "concurrently --kill-others \"npm run webpackw\" \"cordova run --emulator -- --live-reload\" ",
     "device": "npm run webpack && cordova run --device",
     "webpack": "webpack",
-    "webpackw": "webpack --watch",
+    "webpack-watch": "webpack --watch",
+    "emulator-live-reload" : "cordova run --emulator -- --live-reload",
     "linter": "jshint src/js/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +18,6 @@
     "babel-core": "^6.23.1",
     "babel-loader": "^6.4.0",
     "babel-preset-env": "^1.2.1",
-    "concurrently": "^3.4.0",
     "copy-webpack-plugin": "^4.0.1",
     "jshint": "^2.9.4",
     "webpack": "^2.2.1"
