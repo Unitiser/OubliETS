@@ -84,6 +84,16 @@ export class DispoService {
 	findFavorites(){
 		return this.sqliteService.run(`select idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from favorites`, [])
 	}
+	
+	addLog(params){
+		var q = `insert into logs (roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime) values (?, ?, ?, ?, ?)`;
+		var p = [params['room-name'], params['room-type'], params['day-of-week'], params['start-time'], params['end-time']];
+		return this.sqliteService.run(q, p);
+	}
+	
+	findLogs(){
+		return this.sqliteService.run(`select idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from logs`, [])
+	}
 
 	getParamClause(fieldInfo, values) {
 		var getConditionClause = function(field, operator, value) {

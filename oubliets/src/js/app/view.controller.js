@@ -103,7 +103,6 @@ export class ViewController {
 		$('#favorites-list').find(".favorite-item").remove();
 		var display = "";
 		$(favorites).each((i, item) => {
-			
             var idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
             ({idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
             display += `<div class="favorite-item" data-id="${idFavorite}">
@@ -112,5 +111,19 @@ export class ViewController {
                         </div>`;
         });
 		$('#favorites-list').append(display);
+	}
+	
+	static fillLogs(logs) {
+		$('#logs-list').find(".log-item").remove();
+		var display = "";
+		$(logs).each((i, item) => {
+            var idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
+            ({idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
+            display += `<div class="log-item" data-id="${idLog}">
+                            <p>Local ${roomName} (${roomType})</p>
+							<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+                        </div>`;
+        });
+		$('#logs-list').append(display);
 	}
 }

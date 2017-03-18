@@ -16,7 +16,7 @@ label {
   font-size: 100%;
 }
 
-.result-item, .favorite-item, .history-item{
+.result-item, .favorite-item, .log-item{
     background-color: white;
     text-align: left;
     padding: 5px 20px 5px 20px;
@@ -27,7 +27,7 @@ label {
   font-size: 110%;
 }
 
-.result-item h3, .result-item p, .favorite-item p, .history-item p {
+.result-item h3, .result-item p, .favorite-item p, .log-item p {
     margin-bottom: 0;
 }
 

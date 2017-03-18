@@ -65,7 +65,13 @@ var app = {
 
 		this.dispoService.search(params)
 			.then((res) => {
-				ViewController.renderSearchResults(res);
+				this.dispoService.addLog(params)
+					.then((res) => {
+						this.dispoService.findLogs().then((res) => { ViewController.fillLogs(res)})
+						ViewController.renderSearchResults(res);
+					}).catch((err) => {
+						console.log(err)
+					});
 			}).catch((err) => {
 				console.log(err)
 			});
