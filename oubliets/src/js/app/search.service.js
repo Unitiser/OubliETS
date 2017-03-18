@@ -29,6 +29,10 @@ export class SearchService {
 	findResources() {
 		return this.sqliteService.run(`select * from ressources`, [])
 	}
+	
+	findRoom(idRoom) {
+		return this.sqliteService.run(`select * from ressources`, [])
+	}
 
 	find(params) {
 		var self = this

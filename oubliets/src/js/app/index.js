@@ -30,11 +30,13 @@ var app = {
 		this.sqliteService.ready().then(() => {
 			this.searchService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
 			this.searchService.findResources().then((res) => { ViewController.fillResources(res)})
+			this.searchService.findRoom(0).then((res) => { ViewController.renderResultItem(res)})
 		})
 
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
+		$("#results-list").on("click", ".result-item", this.showResultItemHandler.bind(this));
 	},
-
+	
 	searchHandler: function(event){
 		var getInputValue = function(name) { return $(`[name="${name}"]`).val() }
 		var getInputArray = function(name) {
@@ -60,11 +62,17 @@ var app = {
 		this.searchService.find(params)
 			.then((res) => {
 				ViewController.renderSearchResults(res);
-
 			}).catch((err) => {
 				console.log(err)
 			});
-	}
+	},
+	
+	showResultItemHandler: function(event){
+		$("#results-list").append("id" + event);
+		$("#results-list").append("id" + event.target.id);
+		$("#results-list").append("id" + $(this).attr("id"));
+		//this.searchService.findRoom(0).then((res) => { ViewController.renderResultItem(res)})
+	},
 };
 
 app.initialize()

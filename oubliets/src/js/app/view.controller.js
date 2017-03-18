@@ -66,5 +66,15 @@ export class ViewController {
         $("#results-list").append($(display));
         this.show("results");
     }
+	
+	static renderResultItem(room){
+		$(room).each((i, item) => {
+            var idRoom, name;
+            ({idRoom, name} = item); // L33t destructuring assignment, a new ES6 kewl feature
+            
+			$("#results-list").append("${idRoom} {name}");
+        });
+		
+	}
 
 }
