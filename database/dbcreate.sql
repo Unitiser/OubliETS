@@ -4,6 +4,7 @@ drop table if exists ressources;
 drop table if exists room_ressource;
 drop table if exists timeslots;
 drop table if exists room_timeslot;
+drop table if exists favorites;
 drop table if exists log;
 
 -- Create the tables
