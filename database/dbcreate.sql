@@ -30,7 +30,7 @@ create table timeslots (
     idTimeslot integer primary key,
     day integer not null,
     startTime integer not null,
-    endTime integer not null
+    endTime integer not null,
     UNIQUE (day, startTime, endTime) ON CONFLICT IGNORE
 );
 
@@ -40,6 +40,10 @@ create table room_timeslot(
     foreign key (idTimeslot) references timeslots(idTimeslot),
     foreign key (idRoom) references rooms(idRoom),
     primary key (idTimeslot, idRoom)
+);
+
+create table favorites (
+    idRoom integer PRIMARY KEY
 );
 
 create table log(
