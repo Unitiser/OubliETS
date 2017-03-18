@@ -43,7 +43,7 @@ export class DispoService {
 			from timeslots t, room_timeslot rt
 			where t.idTimeslot = rt.idTimeslot
 			and rt.idRoom = ` + idRoom
-		return this.sqliteService.run(query, []) 
+		return this.sqliteService.run(query, [])
 	}
 
 	search(params) {
@@ -63,30 +63,29 @@ export class DispoService {
 			if (clause) havings.push(clause)
 		});
 		var query = select + groupBy + (havings.length ? having + havings.join(' and '): "")
-		console.log(query);
 
 		return this.sqliteService.run(query, [])
 	}
-	
+
 	addFavorite(params){
 		var q = `insert into favorites (roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime) values (?, ?, ?, ?, ?)`;
 		var p = [params['room-name'], params['room-type'], params['day-of-week'], params['start-time'], params['end-time']];
 		return this.sqliteService.run(q, p);
 	}
-	
+
 	removeFavorite(id){
 		return this.sqliteService.run(`delete from favorites where idFavorite = ?`, [id]);
 	}
-	
+
 	findFavorites(){
 		return this.sqliteService.run(`select idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from favorites`, [])
 	}
-	
+
 	findFavorite(id){
 		var select = `select idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from favorites where idFavorite = ?`
 		return this.sqliteService.run(select, [id])
 	}
-	
+
 	clearFavorites(){
 		return this.sqliteService.run(`delete from favorites`)
 	}
@@ -96,20 +95,20 @@ export class DispoService {
 		var p = [params['room-name'], params['room-type'], params['day-of-week'], params['start-time'], params['end-time']];
 		return this.sqliteService.run(q, p);
 	}
-	
+
 	removeLog(id){
 		return this.sqliteService.run(`delete from logs where idLog = ?`, [id]);
 	}
-	
+
 	findLog(id){
 		var select = `select idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from logs where idLog = ?`
 		return this.sqliteService.run(select, [id])
 	}
-	
+
 	findLogs(){
 		return this.sqliteService.run(`select idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from logs`, [])
 	}
-	
+
 	clearLogs(){
 		return this.sqliteService.run(`delete from logs`)
 	}
