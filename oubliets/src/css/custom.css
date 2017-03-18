@@ -31,3 +31,11 @@ label {
     margin-bottom: 0;
 }
 
+.small-input {
+  width: auto;
+}
+
+.small-label {
+  display: inline;
+  padding: 5px;
+}

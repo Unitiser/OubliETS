@@ -36,8 +36,8 @@ export class ViewController {
 		var id = name + "_" + value + "_" + Math.random().toString(36).substring(7);
 
 		var span = $('<span></span>')
-		span.append('<label for="' + id + '">' + name + '</label>')
-		span.append('<input id="' + id + '" type="checkbox" value="' + value + '"/>')
+		span.append('<input id="' + id + '" type="checkbox" value="' + value + '" class="small-input" />')
+		span.append('<label for="' + id + '" class="small-label">' + name + '</label>')
 
 		return span
 	}
