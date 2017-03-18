@@ -109,11 +109,11 @@ var app = {
 		}
 	},
 	
-	clearFavoritesHandler: function(id){
+	clearFavoritesHandler: function(event){
 		this.dispoService.clearFavorites().then((res) => { ViewController.unrenderFavorites()})
 	},
 	
-	clearLogsHandler: function(id){
+	clearLogsHandler: function(event){
 		this.dispoService.clearLogs().then((res) => { ViewController.unrenderLogs()})
 	},
 };
