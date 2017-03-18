@@ -72,8 +72,10 @@ var app = {
 	},
 	
 	showResultItemHandler: function(id){
-		this.searchService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(res)})
-		this.searchService.findTimeslotsForRoom(id).then((res) => { ViewController.renderRoomTimeslots(res)})
+		var resultItem = $("#" + id);
+		
+		this.searchService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(resultItem, res)})
+		this.searchService.findTimeslotsForRoom(id).then((res) => { ViewController.renderRoomTimeslots(resultItem, res)})
 	},
 };
 

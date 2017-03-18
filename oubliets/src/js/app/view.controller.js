@@ -67,19 +67,39 @@ export class ViewController {
         this.show("results");
     }
 	
-	static renderRoomResources(res){
-		$(res).each((i, item) => {
-            var idRessource, name;
-            ({idRessource, name} = item);
-            $("#results-list").append(`<h3>${name}</h3>`);
-        });
+	static renderRoomResources(resultItem, res){
+		if ($(res).length > 0){
+			resultItem.append(`<br/><p>Ressource(s) :</p>`);
+			$(res).each((i, item) => {
+				var idRessource, name;
+				({idRessource, name} = item);
+				resultItem.append(`<p>${name}</p>`);
+			});
+		}
 	}
 	
-	static renderRoomTimeslots(res){
-		$(res).each((i, item) => {
-            var idTimeslot, day, startTime, endTime;
-            ({idTimeslot, day, startTime, endTime} = item);
-            $("#results-list").append(`<h3>${day}</h3>`);
-        });
+	static renderRoomTimeslots(resultItem, res){
+		if ($(res).length > 0){
+			resultItem.append(`<br/><p>Disponibilité(s) :</p>`);
+			$(res).each((i, item) => {
+				var idTimeslot, day, startTime, endTime;
+				({idTimeslot, day, startTime, endTime} = item);
+				var dayString = this.getDayFromIndex(day);
+				resultItem.append(`<p>${dayString} de ${startTime}h00 à ${endTime}h00</p>`);
+			});
+		}
+	}
+	
+	static getDayFromIndex(index){
+		switch(index) {
+			case 0: return "dimanche";
+			case 1: return "lundi";
+			case 2: return "mardi";
+			case 3: return "mercredi";
+			case 4: return "jeudi";
+			case 5: return "vendredi"
+			case 6: return "samedi"
+			default: return "parfois"
+		}
 	}
 }
