@@ -30,10 +30,10 @@ function createTimeSlots(){
 
 // Create a new room
 function addRoom(r){
-    db.run(`insert into rooms (name, type) values (?, ?)`, [r.name, r.type], () => {
         _.each(r.ressources, (ressource_name) => addRoomResource(r.name, ressource_name));
         _.each(r.timeslots, (ts) => addRoomTimeslot(r.name, ts));
     });
+	db.run(`insert into rooms (name, type, access) values (?, ?, ?)`, [r.name, r.type, r.access], () => {
 }
 
 // Create a new ressource

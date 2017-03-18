@@ -61,7 +61,6 @@ export class DispoService {
 		$.each(params, function(key, values) {
 			let clause = self.getParamClause(self.getRealSearchField(key), values)
 			if (clause) havings.push(clause)
-			console.log(key, values)
 		});
 		var query = select + groupBy + (havings.length ? having + havings.join(' and '): "")
 		console.log(query);

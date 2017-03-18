@@ -9,18 +9,19 @@ drop table if exists logs;
 
 -- Create the tables
 create table rooms (
-    idRoom integer PRIMARY KEY, 
-    name text NOT NULL, 
+    idRoom integer PRIMARY KEY,
+    access text NOT NULL,
+    name text NOT NULL,
     type text NOT NULL
 );
 
 create table ressources (
-    idRessource integer PRIMARY KEY, 
+    idRessource integer PRIMARY KEY,
     name text NOT NULL
 );
 
 create table room_ressource (
-    idRessource integer not null, 
+    idRessource integer not null,
     idRoom integer not null,
     foreign key (idRessource) references ressources(idRessource),
     foreign key (idRoom) references rooms(idRoom),
@@ -36,7 +37,7 @@ create table timeslots (
 );
 
 create table room_timeslot(
-    idTimeslot integer not null, 
+    idTimeslot integer not null,
     idRoom integer not null,
     foreign key (idTimeslot) references timeslots(idTimeslot),
     foreign key (idRoom) references rooms(idRoom),
@@ -60,5 +61,3 @@ create table logs (
 	timeslotStartTime integer,
 	timeslotEndTime integer
 );
-
-
