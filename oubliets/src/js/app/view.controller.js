@@ -89,8 +89,7 @@ export class ViewController {
 			$(res).each((i, item) => {
 				var idTimeslot, day, startTime, endTime;
 				({idTimeslot, day, startTime, endTime} = item);
-				var dayString = this._getDayFromIndex(day);
-				display += `<p>${dayString} de ${startTime}h00 à ${endTime}h00</p>`;
+				display += `<p>${Labels.day[day]} de ${startTime}h00 à ${endTime}h00</p>`;
 			});
 			resultItem.append(`<span class="roomTimeslots">` + display + `</span>`);
 		}
@@ -107,25 +106,11 @@ export class ViewController {
 			
             var idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
             ({idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-            var dayString = this._getDayFromIndex(timeslotDay);
             display += `<div class="favorite-item" data-id="${idFavorite}">
                             <p>Local ${roomName} (${roomType})</p>
-							<p>${dayString} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+							<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
                         </div>`;
         });
 		$('#favorites-list').append(display);
-	}
-	
-	static _getDayFromIndex(index){
-		switch(index) {
-			case 0: return "dimanche";
-			case 1: return "lundi";
-			case 2: return "mardi";
-			case 3: return "mercredi";
-			case 4: return "jeudi";
-			case 5: return "vendredi"
-			case 6: return "samedi"
-			default: return "parfois"
-		}
 	}
 }
