@@ -57,7 +57,7 @@ export class DispoService {
 		var having = ` having `
 		var havings = []
 		var groupBy = ` group by r.name, t.day, t.startTime, t.endTime`
-
+		//$("favorites-list").append(select);
 		$.each(params, function(key, values) {
 			let clause = self.getParamClause(self.getRealSearchField(key), values)
 			if (clause) havings.push(clause)
@@ -83,6 +83,11 @@ export class DispoService {
 		return this.sqliteService.run(`select idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from favorites`, [])
 	}
 	
+	findFavorite(id){
+		var select = `select idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from favorites where idFavorite = ?`
+		return this.sqliteService.run(select, [id])
+	}
+	
 	clearFavorites(){
 		return this.sqliteService.run(`delete from favorites`)
 	}
@@ -95,6 +100,11 @@ export class DispoService {
 	
 	removeLog(id){
 		return this.sqliteService.run(`delete from logs where idLog = ?`, [id]);
+	}
+	
+	findLog(id){
+		var select = `select idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from logs where idLog = ?`
+		return this.sqliteService.run(select, [id])
 	}
 	
 	findLogs(){
@@ -135,7 +145,6 @@ export class DispoService {
 			'room-name' : { 'field' : 'r.name', 'operator' : '=' },
 			'start-time' : { 'field' : 't.startTime', 'operator' : '<=' },
 			'end-time' : { 'field' : 't.endTime', 'operator' : '>=' },
-			'resource' : { 'field' : 'rr.name', 'operator' : '=' },
 			'room-type' : { 'field' : 'r.type', 'operator' : '=' },
 			'day-of-week' : { 'field' : 't.day', 'operator' : '=' },
 		}

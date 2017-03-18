@@ -75,7 +75,7 @@ var app = {
 			})
 			return items
 		}
-		var inputs = ['room-name', 'day-of-week', 'start-time', 'end-time', 'room-type', 'resource']
+		var inputs = ['room-name', 'day-of-week', 'start-time', 'end-time', 'room-type']
 		var params = {}
 		inputs.forEach((name) => {
 			var value = getInputValue(name)
@@ -155,9 +155,43 @@ var app = {
 	},
 	
 	searchFromFavoriteHandler: function(id){
+		this.dispoService.findFavorite(id)
+			.then((favorites) => {
+				var params = {};
+				
+				params['room-name'] = (favorites[0].roomName === null) ? "" : favorites[0].roomName;
+				params['room-type'] = (favorites[0].roomType === null) ? "" : favorites[0].roomType;
+				params['day-of-week'] = favorites[0].timeslotDay;
+				params['start-time'] = favorites[0].timeslotStartTime;
+				params['end-time'] = favorites[0].timeslotEndTime;
+				params['accesses'] = ["all", "software-it", "graduates", "mecanical"]; // TODO
+				params['resources'] = ["television", "computer", "whiteboard"]; // TODO
+				
+				this.dispoService.search(params)
+					.then((res) => {
+						ViewController.renderSearchResults(res);
+					});
+			});
 	},
 	
 	searchFromLogHandler: function(id){
+		this.dispoService.findLog(id)
+			.then((logs) => {
+				var params = {};
+				
+				params['room-name'] = (logs[0].roomName === null) ? "" : logs[0].roomName;
+				params['room-type'] = (logs[0].roomType === null) ? "" : logs[0].roomType;
+				params['day-of-week'] = logs[0].timeslotDay;
+				params['start-time'] = logs[0].timeslotStartTime;
+				params['end-time'] = logs[0].timeslotEndTime;
+				params['accesses'] = ["all", "software-it", "graduates", "mecanical"]; // TODO
+				params['resources'] = ["television", "computer", "whiteboard"]; // TODO
+				
+				this.dispoService.search(params)
+					.then((res) => {
+						ViewController.renderSearchResults(res);
+					});
+			});
 	},
 };
 
