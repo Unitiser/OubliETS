@@ -14,5 +14,8 @@ export class FavoriteService {
 	}
 
 	remove(id){
+		var q = `delete from favorites where idFavorite = ?`
+		var p = [id]
+		return this.sqliteService.run(q, p);
 	}
 }
