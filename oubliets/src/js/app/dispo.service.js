@@ -17,7 +17,7 @@
 //     where t.startTime = 8
 //     group by r.idRoom;
 
-export class SearchService {
+export class DispoService {
 	constructor(sqliteService) {
 		this.sqliteService = sqliteService
 	}
@@ -46,7 +46,7 @@ export class SearchService {
 		return this.sqliteService.run(query, []) 
 	}
 
-	find(params) {
+	search(params) {
 		var self = this
 		// TODO: This way of building the query is quite horrible ... we should probably find something better.
 		var select = `select r.idRoom, r.name, r.type, t.day, t.startTime, t.endTime, group_concat(re.name) as res from rooms as r
@@ -67,6 +67,22 @@ export class SearchService {
 		console.log(query);
 
 		return this.sqliteService.run(query, [])
+	}
+	
+	addFavorite(params){
+		var q = `insert into favorites (roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime) values (?, ?, ?, ?, ?)`;
+		var p = [params['room-name'], params['room-type'], params['day-of-week'], params['start-time'], params['end-time']];
+		return this.sqliteService.run(q, p);
+	}
+	
+	removeFavorite(id){
+		var q = `delete from favorites where idFavorite = ?`
+		var p = [id]
+		return this.sqliteService.run(q, p);
+	}
+	
+	findFavorites(){
+		return this.sqliteService.run(`select idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from favorites`, [])
 	}
 
 	getParamClause(fieldInfo, values) {
@@ -91,7 +107,6 @@ export class SearchService {
 		}
 		return clause
 	}
-
 
 	getRealSearchField(name){
 		let mapping = {

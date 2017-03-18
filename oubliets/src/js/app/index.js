@@ -1,7 +1,6 @@
 import "babel-polyfill"
 import {SqliteService} from './sqlite.service'
-import {FavoriteService} from './favorite.service'
-import {SearchService} from './search.service'
+import {DispoService} from './dispo.service'
 import {ViewController} from './view.controller'
 
 var app = {
@@ -16,8 +15,7 @@ var app = {
 	// 'pause', 'resume', etc.
 	onDeviceReady: function() {
 		this.sqliteService = new SqliteService('dispo.db')
-		this.searchService = new SearchService(this.sqliteService)
-		this.favoriteService = new FavoriteService(this.sqliteService)
+		this.dispoService = new DispoService(this.sqliteService)
 
 		ViewController.show("search");
 
@@ -29,9 +27,9 @@ var app = {
 		});
 
 		this.sqliteService.ready().then(() => {
-			this.searchService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
-			this.searchService.findResources().then((res) => { ViewController.fillResources(res)})
-			this.favoriteService.find().then((res) => { ViewController.fillFavorites(res)})
+			this.dispoService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
+			this.dispoService.findResources().then((res) => { ViewController.fillResources(res)})
+			this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
 		})
 
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
@@ -65,7 +63,7 @@ var app = {
 			if(values) params[name] = values
 		})
 
-		this.searchService.find(params)
+		this.dispoService.search(params)
 			.then((res) => {
 				ViewController.renderSearchResults(res);
 			}).catch((err) => {
@@ -81,9 +79,9 @@ var app = {
 			var value = getInputValue(name)
 			if(value) params[name] = value
 		});
-		this.favoriteService.add(params)
+		this.dispoService.addFavorite(params)
 			.then((res) => {
-				this.favoriteService.find().then((res) => { ViewController.fillFavorites(res)})
+				this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
 			}).catch((err) => {
 				console.log(err)
 			});
@@ -93,8 +91,8 @@ var app = {
 		var resultItem = $("#" + id);
 
 		if (resultItem.attr("data-show") === "false") {
-			this.searchService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(resultItem, res)})
-			this.searchService.findTimeslotsForRoom(id).then((res) => { ViewController.renderRoomTimeslots(resultItem, res)})
+			this.dispoService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(resultItem, res)})
+			this.dispoService.findTimeslotsForRoom(id).then((res) => { ViewController.renderRoomTimeslots(resultItem, res)})
 			resultItem.attr("data-show", "true");
 		} else {
 			ViewController.unrenderRoomResources(resultItem);
