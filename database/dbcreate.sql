@@ -1,5 +1,7 @@
 -- Drop the tables if they already exist
 drop table if exists rooms;
+drop table if exists softwares;
+drop table if exists room_software;
 drop table if exists ressources;
 drop table if exists room_ressource;
 drop table if exists timeslots;
@@ -18,6 +20,19 @@ create table rooms (
 create table ressources (
     idRessource integer PRIMARY KEY,
     name text NOT NULL
+);
+
+create table softwares (
+    idSoftware integer PRIMARY KEY,
+    name text NOT NULL
+);
+
+create table room_software (
+    idSoftware integer not null,
+    idRoom integer not null,
+    foreign key (idSoftware) references softwares(idSoftware),
+    foreign key (idRoom) references rooms(idRoom),
+    primary key (idSoftware, idRoom)
 );
 
 create table room_ressource (

@@ -32,6 +32,12 @@ export class ViewController {
 		})
 	}
 
+	static fillSoftwares(softwares) {
+		$(softwares).each((i, software) => {
+			$('#softwares').append(ViewController._createLabelAndCheckbox(software.name, software.name))
+		})
+	}
+
 	static _createLabelAndCheckbox(value, name) {
 		var id = name + "_" + value + "_" + Math.random().toString(36).substring(7);
 
@@ -50,13 +56,13 @@ export class ViewController {
     static renderSearchResults(searchResults){
         var display = "";
         $("#results-list").empty();
-                
+
         if(!searchResults.length) display = `<p>${Labels.noResults}</p>`;
 
         $(searchResults).each((i, item) => {
             var idRoom, type, name, startTime, endTime;
             ({idRoom, type, name, startTime, endTime} = item); // L33t destructuring assignment, a new ES6 kewl feature
-            
+
             display += `<div class="result-item" data-show="false" data-id="${idRoom}">
                             <h3>${name} : ${Labels.roomTypeMap[type]}</h3>
                             <p>Disponible de ${startTime}h00 à ${endTime}h00</p>
@@ -66,7 +72,7 @@ export class ViewController {
         $("#results-list").append($(display));
         this.show("results");
     }
-	
+
 	static renderRoomResources(resultItem, res){
 		if ($(res).length > 0){
 			var display = `<br/><p>Ressource(s) :</p>`;
@@ -78,11 +84,11 @@ export class ViewController {
 			resultItem.append(`<span class="roomResources">` + display + `</span>`);
 		}
 	}
-	
+
 	static unrenderRoomResources(resultItem){
 		resultItem.find(".roomResources").remove();
 	}
-	
+
 	static renderRoomTimeslots(resultItem, res){
 		if ($(res).length > 0){
 			var display = `<br/><p>Disponibilité(s) :</p>`;
@@ -94,11 +100,11 @@ export class ViewController {
 			resultItem.append(`<span class="roomTimeslots">` + display + `</span>`);
 		}
 	}
-	
+
 	static unrenderRoomTimeslots(resultItem){
 		resultItem.find(".roomTimeslots").remove();
 	}
-	
+
 	static fillFavorites(favorites) {
 		$('#favorites-list').find(".favorite-item").remove();
 		var display = "";
@@ -113,15 +119,15 @@ export class ViewController {
         });
 		$('#favorites-list').append(display);
 	}
-	
+
 	static unrenderFavorites() {
 		$('#favorites-list').find(".favorite-item").remove();
 	}
-	
+
 	static unrenderFavorite(id){
 		$('#favorites-list').find("[data-id="+id+"]").remove();
 	}
-	
+
 	static fillLogs(logs) {
 		$('#logs-list').find(".log-item").remove();
 		var display = "";
@@ -136,11 +142,11 @@ export class ViewController {
         });
 		$('#logs-list').append(display);
 	}
-	
+
 	static unrenderLogs() {
 		$('#logs-list').find(".log-item").remove();
 	}
-	
+
 	static unrenderLog(id){
 		$('#logs-list').find("[data-id="+id+"]").remove();
 	}

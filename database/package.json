@@ -5,7 +5,8 @@
   "main": "dummy.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dummy.js"
+    "start": "node dummy.js",
+    "update": "npm start && cp -f dispo.db ../oubliets/src/"
   },
   "keywords": [
     "mocks",

@@ -30,6 +30,10 @@ export class DispoService {
 		return this.sqliteService.run(`select * from ressources`, [])
 	}
 
+	findSoftwares() {
+		return this.sqliteService.run(`select * from softwares`, [])
+	}
+
 	findResourcesForRoom(idRoom) {
 		var query = `select r.idRessource, r.name
 			from ressources r, room_ressource rr
@@ -49,10 +53,12 @@ export class DispoService {
 	search(params) {
 		var self = this
 		// TODO: This way of building the query is quite horrible ... we should probably find something better.
-		var select = `select r.idRoom, r.name, r.type, t.day, t.startTime, t.endTime, group_concat(re.name) as res from rooms as r
+		var select = `select r.idRoom, r.name, r.type, t.day, t.startTime, t.endTime, group_concat(so.name) as sof, group_concat(re.name) as res from rooms as r
 			left join room_timeslot as rt on r.idRoom = rt.idRoom
 			left join timeslots as t on t.idTimeslot = rt.idTimeslot
+			left join room_software as rs on rs.idRoom = r.idRoom
 			left join room_ressource as rr on rr.idRoom = r.idRoom
+			left join softwares as so on rs.idSoftware = so.idSoftware
 			left join ressources as re on rr.idRessource = re.idRessource `
 		var having = ` having `
 		var havings = []
@@ -63,6 +69,7 @@ export class DispoService {
 			if (clause) havings.push(clause)
 		});
 		var query = select + groupBy + (havings.length ? having + havings.join(' and '): "")
+		console.log(query)
 
 		return this.sqliteService.run(query, [])
 	}
@@ -145,6 +152,7 @@ export class DispoService {
 		let mapping = {
 			'accesses': { 'field' : 'r.access', 'operator' : '=', 'type': 'array', 'arrayOperator': 'or'}, // This is a proposition ... we should probably find something better.
 			'resources': { 'field' : 'res', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
+			'softwares': { 'field' : 'sof', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
 			'room-name' : { 'field' : 'r.name', 'operator' : '=' },
 			'start-time' : { 'field' : 't.startTime', 'operator' : '<=' },
 			'end-time' : { 'field' : 't.endTime', 'operator' : '>=' },

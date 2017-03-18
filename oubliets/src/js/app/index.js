@@ -30,10 +30,11 @@ var app = {
 		this.sqliteService.ready().then(() => {
 			this.dispoService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
 			this.dispoService.findResources().then((res) => { ViewController.fillResources(res)})
+			this.dispoService.findSoftwares().then((res) => { ViewController.fillSoftwares(res)})
 			this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
 			this.dispoService.findLogs().then((res) => { ViewController.fillLogs(res)})
 		})
-		
+
 		// Events
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
 		$('[name="button-favorite"]').click(this.favoriteHandler.bind(this));
@@ -65,7 +66,7 @@ var app = {
 			fn(id);
 		});
 	},
-	
+
 	searchHandler: function(event){
 		var getInputValue = function(name) { return $(`[name="${name}"]`).val() }
 		var getInputArray = function(name) {
@@ -82,7 +83,7 @@ var app = {
 			if(value) params[name] = value
 		});
 
-		var inputsArray = ['accesses', 'resources'] // We could merge with inputs.forEach function someday
+		var inputsArray = ['accesses', 'resources', 'softwares'] // We could merge with inputs.forEach function someday
 		inputsArray.forEach((name) => {
 			var values = getInputArray(name)
 			if(values) params[name] = values
@@ -97,7 +98,7 @@ var app = {
 					});
 			});
 	},
-	
+
 	favoriteHandler: function(event){
 		var getInputValue = function(name) { return $(`[name="${name}"]`).val() }
 		var inputs = ['room-name', 'room-type', 'day-of-week', 'start-time', 'end-time']
@@ -113,7 +114,7 @@ var app = {
 				console.log(err)
 			});
 	},
-	
+
 	showResultItemHandler: function(id){
 		var resultItem = $("#results-list [data-id="+id+"]");
 
@@ -127,15 +128,15 @@ var app = {
 			resultItem.attr("data-show", "false");
 		}
 	},
-	
+
 	clearFavoritesHandler: function(event){
 		this.dispoService.clearFavorites().then((res) => { ViewController.unrenderFavorites()})
 	},
-	
+
 	clearLogsHandler: function(event){
 		this.dispoService.clearLogs().then((res) => { ViewController.unrenderLogs()})
 	},
-	
+
 	removeFavoriteHandler: function(id){
 		this.dispoService.removeFavorite(id)
 			.then((res) => {
@@ -144,7 +145,7 @@ var app = {
 				console.log(err)
 			});
 	},
-	
+
 	removeLogHandler: function(id){
 		this.dispoService.removeLog(id)
 			.then((res) => {
@@ -153,12 +154,12 @@ var app = {
 				console.log(err)
 			});
 	},
-	
+
 	searchFromFavoriteHandler: function(id){
 		this.dispoService.findFavorite(id)
 			.then((favorites) => {
 				var params = {};
-				
+
 				params['room-name'] = (favorites[0].roomName === null) ? "" : favorites[0].roomName;
 				params['room-type'] = (favorites[0].roomType === null) ? "" : favorites[0].roomType;
 				params['day-of-week'] = favorites[0].timeslotDay;
@@ -172,12 +173,12 @@ var app = {
 					});
 			});
 	},
-	
+
 	searchFromLogHandler: function(id){
 		this.dispoService.findLog(id)
 			.then((logs) => {
 				var params = {};
-				
+
 				params['room-name'] = (logs[0].roomName === null) ? "" : logs[0].roomName;
 				params['room-type'] = (logs[0].roomType === null) ? "" : logs[0].roomType;
 				params['day-of-week'] = logs[0].timeslotDay;

@@ -16,6 +16,7 @@ function populate(err){
 
 	createTimeSlots();
 	_.each(ressources, addRessource);
+	_.each(softwares, addSoftware);
 	_.each(rooms, addRoom);
 }
 
@@ -32,6 +33,7 @@ function createTimeSlots(){
 function addRoom(r){
 	db.run(`insert into rooms (name, type, access) values (?, ?, ?)`, [r.name, r.type, r.access], () => {
 		_.each(r.ressources, (ressource_name) => addRoomResource(r.name, ressource_name));
+		_.each(r.softwares, (software_name) => addRoomSoftware(r.name, software_name));
 		_.each(r.timeslots, (ts) => addRoomTimeslot(r.name, ts));
 	});
 }
@@ -41,6 +43,11 @@ function addRessource(r){
 	db.run(`insert into ressources (name) values ('${r.name}')`);
 }
 
+// Create a new software
+function addSoftware(s){
+	db.run(`insert into softwares (name) values ('${s.name}')`);
+}
+
 // Link a room to a ressource
 function addRoomResource(room_name, ressource_name){
 	db.run(`insert into room_ressource (idRoom, idRessource)
@@ -48,6 +55,15 @@ function addRoomResource(room_name, ressource_name){
 	(select idRessource from ressources where name = ?))`,
 	[room_name, ressource_name]);
 }
+
+// Link a room to a software
+function addRoomSoftware(room_name, software_name){
+	db.run(`insert into room_software (idRoom, idSoftware)
+	values((select idRoom from rooms where name = ?),
+	(select idSoftware from softwares where name = ?))`,
+	[room_name, software_name]);
+}
+
 
 // Link a room to a time slot
 function addRoomTimeslot(room_name, ts){
@@ -93,46 +109,63 @@ var ressources = [{
 	name: 'television'
 }];
 
+var softwares = [{
+	name: 'Visual Studio 2016'
+}, {
+	name: 'Unity 6.1'
+}, {
+	name: 'MatLab'
+}, {
+	name: '3DS Max'
+}];
+
 var rooms = [{
 	name: 'A1600',
 	type: 'classroom',
 	access: 'all',
 	ressources: ['whiteboard'],
+	softwares: [],
 	timeslots: ['sat 8-24', 'sun 8-24', 'fri 10-13']
 },{
 	name: 'Bibliotheque - salle de groupe',
 	type: 'classroom',
 	access: 'all',
 	ressources: ['whiteboard', 'television'],
+	softwares: [],
 	timeslots: ['sat 8-19', 'sun 8-19', 'mon 8-22', 'fri 10-13']
 },{
 	name: 'A1234',
 	type: 'classroom',
 	access: 'all',
 	ressources: ['whiteboard'],
+	softwares: [],
 	timeslots: ['wed 8-9', 'fri 10-13']
 },{
 	name: 'E3457',
 	type: 'lab',
 	access: 'graduates',
 	ressources: ['computer', 'whiteboard'],
+	softwares: ['Visual Studio 2016'],
 	timeslots: ['mon 11-12', 'tue 20-24', 'mon 15-18']
 },{
 	name: 'A3456',
 	type: 'lab',
 	access: 'software-it',
 	ressources: ['computer', 'whiteboard'],
+	softwares: ['Visual Studio 2016', 'Unity 6.1'],
 	timeslots: ['mon 11-14', 'tue 20-22', 'mon 15-19']
 },{
 	name: 'B1234',
 	type: 'classroom',
 	access: 'software-it',
 	ressources: ['whiteboard'],
+	softwares: [],
 	timeslots: ['thu 11-13', ' fri 12-13']
 },{
 	name: 'C2234',
 	type: 'lab',
 	access: 'mecanical',
 	ressources: ['computer'],
+	softwares: ['MatLab'],
 	timeslots: ['sat 8-14']
 }];
