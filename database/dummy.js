@@ -11,7 +11,7 @@ db.exec(creationScript, populate);
 function populate(err){
     if(err){
         console.log(err);
-        return;
+		return;
     }
 
     createTimeSlots();
@@ -30,7 +30,7 @@ function createTimeSlots(){
 
 // Create a new room
 function addRoom(r){
-    db.run(`insert into rooms (name, type, access) values (?, ?, ?)`, [r.name, r.type, r.access], () => {
+    db.run(`insert into rooms (name, type) values (?, ?)`, [r.name, r.type], () => {
         _.each(r.ressources, (ressource_name) => addRoomResource(r.name, ressource_name));
         _.each(r.timeslots, (ts) => addRoomTimeslot(r.name, ts));
     });
