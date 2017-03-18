@@ -73,9 +73,16 @@ var app = {
 	
 	showResultItemHandler: function(id){
 		var resultItem = $("#" + id);
-		
-		this.searchService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(resultItem, res)})
-		this.searchService.findTimeslotsForRoom(id).then((res) => { ViewController.renderRoomTimeslots(resultItem, res)})
+
+		if (resultItem.attr("data-show") === "false") {
+			this.searchService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(resultItem, res)})
+			this.searchService.findTimeslotsForRoom(id).then((res) => { ViewController.renderRoomTimeslots(resultItem, res)})
+			resultItem.attr("data-show", "true");
+		} else {
+			ViewController.unrenderRoomResources(resultItem);
+			ViewController.unrenderRoomTimeslots(resultItem);
+			resultItem.attr("data-show", "false");
+		}
 	},
 };
 
