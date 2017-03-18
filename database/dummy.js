@@ -9,65 +9,65 @@ db.exec(creationScript, populate);
 
 // Populate the dataset
 function populate(err){
-    if(err){
-        console.log(err);
+	if(err){
+		console.log(err);
 		return;
-    }
+	}
 
-    createTimeSlots();
-    _.each(ressources, addRessource);
-    _.each(rooms, addRoom);
+	createTimeSlots();
+	_.each(ressources, addRessource);
+	_.each(rooms, addRoom);
 }
 
 // We have 1 timeslot for every day of the week (identified as 0 to 6) from 8h to 24h
 function createTimeSlots(){
-    for(var i = 0; i <= 6; ++i){
-        for (var j = 8; j < 24; ++j){
-            db.run(`insert into timeslots (day, startTime, endTime) values (?, ?, ?)`, [i, j, j+1]);
-        }
-    }
+	for(var i = 0; i <= 6; ++i){
+		for (var j = 8; j < 24; ++j){
+			db.run(`insert into timeslots (day, startTime, endTime) values (?, ?, ?)`, [i, j, j+1]);
+		}
+	}
 }
 
 // Create a new room
 function addRoom(r){
-        _.each(r.ressources, (ressource_name) => addRoomResource(r.name, ressource_name));
-        _.each(r.timeslots, (ts) => addRoomTimeslot(r.name, ts));
-    });
 	db.run(`insert into rooms (name, type, access) values (?, ?, ?)`, [r.name, r.type, r.access], () => {
+		_.each(r.ressources, (ressource_name) => addRoomResource(r.name, ressource_name));
+		_.each(r.timeslots, (ts) => addRoomTimeslot(r.name, ts));
+	});
 }
 
 // Create a new ressource
 function addRessource(r){
-    db.run(`insert into ressources (name) values ('${r.name}')`);
+	db.run(`insert into ressources (name) values ('${r.name}')`);
 }
 
 // Link a room to a ressource
 function addRoomResource(room_name, ressource_name){
-    db.run(`insert into room_ressource (idRoom, idRessource) 
-                values((select idRoom from rooms where name = ?), 
-                       (select idRessource from ressources where name = ?))`, 
-            [room_name, ressource_name]);
+	db.run(`insert into room_ressource (idRoom, idRessource)
+	values((select idRoom from rooms where name = ?),
+	(select idRessource from ressources where name = ?))`,
+	[room_name, ressource_name]);
 }
 
 // Link a room to a time slot
 function addRoomTimeslot(room_name, ts){
-    // Parse the time slot string using regex
-    var [ts, day, start, end ] = new RegExp(/([a-z]{3}) ([\d]{1,2})-([\d]{1,2})/g).exec(ts);
+	// Parse the time slot string using regex
+	var [ts, day, start, end ] = new RegExp(/([a-z]{3}) ([\d]{1,2})-([\d]{1,2})/g).exec(ts);
 
 	db.run(`insert into timeslots (day, startTime, endTime) values (?, ?, ?)`, [days[day], start, end],
-		(err) => {
-		    db.run(`insert into room_timeslot (idRoom, idTimeslot)
-		                values ((select idRoom from rooms where name = ?),
-		                        (select idTimeslot from timeslots where day = ? and startTime = ? and endTime = ?))`,
-		            [room_name, days[day], start, end])
-		}
-	)
+	(err) => {
+		db.run(`insert into room_timeslot (idRoom, idTimeslot)
+		values ((select idRoom from rooms where name = ?),
+		(select idTimeslot from timeslots where day = ? and startTime = ? and endTime = ?))`,
+		[room_name, days[day], start, end])
+	}
+)
 }
 
 // Mock data
 
 // Map for days of the week to ID
-// 0. Sunday - Sun.    
+// 0. Sunday - Sun.
 // 1. Monday - Mon.
 // 2. Tuesday - Tue.
 // 3. Wednesday - Wed.
@@ -75,64 +75,64 @@ function addRoomTimeslot(room_name, ts){
 // 5. Friday - Fri.
 // 6. Saturday - Sat.
 var days = {
-    sun : 0,
-    mon : 1,
-    tue : 2,
-    wed : 3,
-    thu : 4,
-    fri : 5,
-    sat : 6
+	sun : 0,
+	mon : 1,
+	tue : 2,
+	wed : 3,
+	thu : 4,
+	fri : 5,
+	sat : 6
 }
 
 
 var ressources = [{
-    name: 'computer'
+	name: 'computer'
 },{
-    name: 'whiteboard'
+	name: 'whiteboard'
 },{
-    name: 'television'
+	name: 'television'
 }];
 
 var rooms = [{
-    name: 'A1600',
-    type: 'classroom',
+	name: 'A1600',
+	type: 'classroom',
 	access: 'all',
-    ressources: ['whiteboard'],
-    timeslots: ['sat 8-24', 'sun 8-24', 'fri 10-13']
+	ressources: ['whiteboard'],
+	timeslots: ['sat 8-24', 'sun 8-24', 'fri 10-13']
 },{
-    name: 'Bibliotheque - salle de groupe',
-    type: 'classroom',
+	name: 'Bibliotheque - salle de groupe',
+	type: 'classroom',
 	access: 'all',
-    ressources: ['whiteboard', 'television'],
-    timeslots: ['sat 8-19', 'sun 8-19', 'mon 8-22', 'fri 10-13']
+	ressources: ['whiteboard', 'television'],
+	timeslots: ['sat 8-19', 'sun 8-19', 'mon 8-22', 'fri 10-13']
 },{
-    name: 'A1234',
-    type: 'classroom',
+	name: 'A1234',
+	type: 'classroom',
 	access: 'all',
-    ressources: ['whiteboard'],
-    timeslots: ['wed 8-9', 'fri 10-13']
+	ressources: ['whiteboard'],
+	timeslots: ['wed 8-9', 'fri 10-13']
 },{
-    name: 'E3457',
-    type: 'lab',
+	name: 'E3457',
+	type: 'lab',
 	access: 'graduates',
-    ressources: ['computer', 'whiteboard'],
-    timeslots: ['mon 11-12', 'tue 20-24', 'mon 15-18']
+	ressources: ['computer', 'whiteboard'],
+	timeslots: ['mon 11-12', 'tue 20-24', 'mon 15-18']
 },{
-    name: 'A3456',
-    type: 'lab',
+	name: 'A3456',
+	type: 'lab',
 	access: 'software-it',
-    ressources: ['computer', 'whiteboard'],
-    timeslots: ['mon 11-14', 'tue 20-22', 'mon 15-19']
+	ressources: ['computer', 'whiteboard'],
+	timeslots: ['mon 11-14', 'tue 20-22', 'mon 15-19']
 },{
-    name: 'B1234',
-    type: 'classroom',
+	name: 'B1234',
+	type: 'classroom',
 	access: 'software-it',
-    ressources: ['whiteboard'],
-    timeslots: ['thu 11-13', ' fri 12-13']
+	ressources: ['whiteboard'],
+	timeslots: ['thu 11-13', ' fri 12-13']
 },{
-    name: 'C2234',
-    type: 'lab',
+	name: 'C2234',
+	type: 'lab',
 	access: 'mecanical',
-    ressources: ['computer'],
-    timeslots: ['sat 8-14']
+	ressources: ['computer'],
+	timeslots: ['sat 8-14']
 }];

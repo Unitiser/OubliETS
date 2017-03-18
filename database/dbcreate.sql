@@ -46,18 +46,18 @@ create table room_timeslot(
 
 create table favorites (
     idFavorite integer PRIMARY KEY,
-	roomName text,
-	roomType text,
-	timeslotDay integer,
-	timeslotStartTime integer,
-	timeslotEndTime integer
+    roomName text,
+    roomType text,
+    timeslotDay integer,
+    timeslotStartTime integer,
+    timeslotEndTime integer
 );
 
 create table logs (
     idHistory integer PRIMARY KEY,
-	roomName text,
-	roomType text,
-	timeslotDay integer,
-	timeslotStartTime integer,
-	timeslotEndTime integer
+    roomName text,
+    roomType text,
+    timeslotDay integer,
+    timeslotStartTime integer,
+    timeslotEndTime integer
 );
