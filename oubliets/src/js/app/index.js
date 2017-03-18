@@ -115,7 +115,7 @@ var app = {
 	},
 	
 	showResultItemHandler: function(id){
-		var resultItem = $("#" + id);
+		var resultItem = $("#results-list [data-id="+id+"]");
 
 		if (resultItem.attr("data-show") === "false") {
 			this.dispoService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(resultItem, res)})
