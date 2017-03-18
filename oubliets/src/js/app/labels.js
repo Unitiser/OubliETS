@@ -5,12 +5,12 @@ export var Labels = {
     },
 	accesses : {
 		"software-it": "LOG/TI",
-		"graduates": "Supérieur",
-		"all": "EG ou SEG ou autre ? :P",
+		"graduates": "Superieur",
+		"all": "Tous",
 		"mecanical": "MEC"
 	},
 	resources: {
-		"television": "Télévision",
+		"television": "Television",
 		"computer": "Ordinateurs",
 		"whiteboard": "Tableau blanc"
 	},
@@ -23,5 +23,5 @@ export var Labels = {
 		5: "vendredi",
 		6: "samedi"
 	},
-    noResults : "No results found"
+    noResults : "Aucun"
 }
