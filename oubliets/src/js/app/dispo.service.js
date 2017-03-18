@@ -76,9 +76,7 @@ export class DispoService {
 	}
 	
 	removeFavorite(id){
-		var q = `delete from favorites where idFavorite = ?`
-		var p = [id]
-		return this.sqliteService.run(q, p);
+		return this.sqliteService.run(`delete from favorites where idFavorite = ?`, [id]);
 	}
 	
 	findFavorites(){
@@ -93,6 +91,10 @@ export class DispoService {
 		var q = `insert into logs (roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime) values (?, ?, ?, ?, ?)`;
 		var p = [params['room-name'], params['room-type'], params['day-of-week'], params['start-time'], params['end-time']];
 		return this.sqliteService.run(q, p);
+	}
+	
+	removeLog(id){
+		return this.sqliteService.run(`delete from logs where idLog = ?`, [id]);
 	}
 	
 	findLogs(){

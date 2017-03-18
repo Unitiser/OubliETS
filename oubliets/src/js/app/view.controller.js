@@ -57,7 +57,7 @@ export class ViewController {
             var idRoom, type, name, startTime, endTime;
             ({idRoom, type, name, startTime, endTime} = item); // L33t destructuring assignment, a new ES6 kewl feature
             
-            display += `<div id="${idRoom}" class="result-item" data-show="false">
+            display += `<div class="result-item" data-show="false" data-id="${idRoom}">
                             <h3>${name} : ${Labels.roomTypeMap[type]}</h3>
                             <p>Disponible de ${startTime}h00 à ${endTime}h00</p>
                         </div>`;
@@ -108,6 +108,7 @@ export class ViewController {
             display += `<div class="favorite-item" data-id="${idFavorite}">
                             <p>Local ${roomName} (${roomType})</p>
 							<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+							<button type="submit" name="button-remove-favorite">Poubelle</button>
                         </div>`;
         });
 		$('#favorites-list').append(display);
@@ -115,6 +116,10 @@ export class ViewController {
 	
 	static unrenderFavorites() {
 		$('#favorites-list').find(".favorite-item").remove();
+	}
+	
+	static unrenderFavorite(id){
+		$('#favorites-list').find("[data-id="+id+"]").remove();
 	}
 	
 	static fillLogs(logs) {
@@ -126,6 +131,7 @@ export class ViewController {
             display += `<div class="log-item" data-id="${idLog}">
                             <p>Local ${roomName} (${roomType})</p>
 							<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+							<button type="submit" name="button-remove-log">Poubelle</button>
                         </div>`;
         });
 		$('#logs-list').append(display);
@@ -133,5 +139,9 @@ export class ViewController {
 	
 	static unrenderLogs() {
 		$('#logs-list').find(".log-item").remove();
+	}
+	
+	static unrenderLog(id){
+		$('#logs-list').find("[data-id="+id+"]").remove();
 	}
 }

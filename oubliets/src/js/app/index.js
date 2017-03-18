@@ -26,21 +26,44 @@ var app = {
 			ViewController.show(targetName);
 		});
 
+		// App launch data
 		this.sqliteService.ready().then(() => {
 			this.dispoService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
 			this.dispoService.findResources().then((res) => { ViewController.fillResources(res)})
 			this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
+			this.dispoService.findLogs().then((res) => { ViewController.fillLogs(res)})
 		})
-
+		
+		// Events
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
 		$('[name="button-favorite"]').click(this.favoriteHandler.bind(this));
+		$('[name="button-clear-favorites"]').click(this.clearFavoritesHandler.bind(this));
+		$('[name="button-clear-logs"]').click(this.clearLogsHandler.bind(this));
 		$("#results-list").on("click", ".result-item", event => {
-			const id = $(event.target).closest('.result-item')[0].id;
+			const id = $(event.target).closest('.result-item').attr("data-id");
 			const fn = this.showResultItemHandler.bind(this);
 			fn(id);
 		});
-		$('[name="button-clear-favorites"]').click(this.clearFavoritesHandler.bind(this));
-		$('[name="button-clear-logs"]').click(this.clearLogsHandler.bind(this));
+		$("#favorites-list").on("click", ".favorite-item", event => {
+			const id = $(event.target).closest('.favorite-item').attr("data-id");
+			const fn = this.searchFromFavoriteHandler.bind(this);
+			fn(id);
+		});
+		$("#favorites-list").on("click", "[name='button-remove-favorite']", event => {
+			const id = $(event.target).parent().attr("data-id");
+			const fn = this.removeFavoriteHandler.bind(this);
+			fn(id);
+		});
+		$("#logs-list").on("click", ".log-item", event => {
+			const id = $(event.target).closest('.log-item').attr("data-id");
+			const fn = this.searchFromLogHandler.bind(this);
+			fn(id);
+		});
+		$("#logs-list").on("click", "[name='button-remove-log']", event => {
+			const id = $(event.target).parent().attr("data-id");
+			const fn = this.removeLogHandler.bind(this);
+			fn(id);
+		});
 	},
 	
 	searchHandler: function(event){
@@ -115,6 +138,30 @@ var app = {
 	
 	clearLogsHandler: function(event){
 		this.dispoService.clearLogs().then((res) => { ViewController.unrenderLogs()})
+	},
+	
+	removeFavoriteHandler: function(id){
+		this.dispoService.removeFavorite(id)
+			.then((res) => {
+				ViewController.unrenderFavorite(id)
+			}).catch((err) => {
+				console.log(err)
+			});
+	},
+	
+	removeLogHandler: function(id){
+		this.dispoService.removeLog(id)
+			.then((res) => {
+				ViewController.unrenderLog(id)
+			}).catch((err) => {
+				console.log(err)
+			});
+	},
+	
+	searchFromFavoriteHandler: function(id){
+	},
+	
+	searchFromLogHandler: function(id){
 	},
 };
 
