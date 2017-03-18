@@ -113,6 +113,10 @@ export class ViewController {
 		$('#favorites-list').append(display);
 	}
 	
+	static unrenderFavorites() {
+		$('#favorites-list').find(".favorite-item").remove();
+	}
+	
 	static fillLogs(logs) {
 		$('#logs-list').find(".log-item").remove();
 		var display = "";
@@ -125,5 +129,9 @@ export class ViewController {
                         </div>`;
         });
 		$('#logs-list').append(display);
+	}
+	
+	static unrenderLogs() {
+		$('#logs-list').find(".log-item").remove();
 	}
 }

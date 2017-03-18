@@ -39,6 +39,8 @@ var app = {
 			const fn = this.showResultItemHandler.bind(this);
 			fn(id);
 		});
+		$('[name="button-clear-favorites"]').click(this.clearFavoritesHandler.bind(this));
+		$('[name="button-clear-logs"]').click(this.clearLogsHandler.bind(this));
 	},
 	
 	searchHandler: function(event){
@@ -105,6 +107,14 @@ var app = {
 			ViewController.unrenderRoomTimeslots(resultItem);
 			resultItem.attr("data-show", "false");
 		}
+	},
+	
+	clearFavoritesHandler: function(id){
+		this.dispoService.clearFavorites().then((res) => { ViewController.unrenderFavorites()})
+	},
+	
+	clearLogsHandler: function(id){
+		this.dispoService.clearLogs().then((res) => { ViewController.unrenderLogs()})
 	},
 };
 
