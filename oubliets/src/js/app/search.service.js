@@ -29,9 +29,21 @@ export class SearchService {
 	findResources() {
 		return this.sqliteService.run(`select * from ressources`, [])
 	}
-	
-	findRoom(idRoom) {
-		return this.sqliteService.run(`select * from ressources`, [])
+
+	findResourcesForRoom(idRoom) {
+		var query = `select r.idRessource, r.name
+			from ressources r, room_ressource rr
+			where r.idRessource = rr.idRessource
+			and rr.idRoom = ` + idRoom
+		return this.sqliteService.run(query, [])
+	}
+
+	findTimeslotsForRoom(idRoom) {
+		var query = `select t.idTimeslot, t.day, t.startTime, t.endTime
+			from timeslots t, room_timeslot rt
+			where t.idTimeslot = rt.idTimeslot
+			and rt.idRoom = ` + idRoom
+		return this.sqliteService.run(query, []) 
 	}
 
 	find(params) {

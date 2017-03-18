@@ -67,14 +67,19 @@ export class ViewController {
         this.show("results");
     }
 	
-	static renderResultItem(room){
-		$(room).each((i, item) => {
-            var idRoom, name;
-            ({idRoom, name} = item); // L33t destructuring assignment, a new ES6 kewl feature
-            
-			$("#results-list").append("${idRoom} {name}");
+	static renderRoomResources(res){
+		$(res).each((i, item) => {
+            var idRessource, name;
+            ({idRessource, name} = item);
+            $("#results-list").append(`<h3>${name}</h3>`);
         });
-		
 	}
-
+	
+	static renderRoomTimeslots(res){
+		$(res).each((i, item) => {
+            var idTimeslot, day, startTime, endTime;
+            ({idTimeslot, day, startTime, endTime} = item);
+            $("#results-list").append(`<h3>${day}</h3>`);
+        });
+	}
 }

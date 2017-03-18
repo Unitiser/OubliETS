@@ -34,7 +34,11 @@ var app = {
 		})
 
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
-		$("#results-list").on("click", ".result-item", this.showResultItemHandler.bind(this));
+		$("#results-list").on("click", ".result-item", event => {
+			const id = $(event.target).closest('.result-item')[0].id;
+			const fn = this.showResultItemHandler.bind(this);
+			fn(id);
+		});
 	},
 	
 	searchHandler: function(event){
@@ -67,11 +71,9 @@ var app = {
 			});
 	},
 	
-	showResultItemHandler: function(event){
-		$("#results-list").append("id" + event);
-		$("#results-list").append("id" + event.target.id);
-		$("#results-list").append("id" + $(this).attr("id"));
-		//this.searchService.findRoom(0).then((res) => { ViewController.renderResultItem(res)})
+	showResultItemHandler: function(id){
+		this.searchService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(res)})
+		this.searchService.findTimeslotsForRoom(id).then((res) => { ViewController.renderRoomTimeslots(res)})
 	},
 };
 
