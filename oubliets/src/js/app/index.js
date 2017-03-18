@@ -1,8 +1,8 @@
 import "babel-polyfill"
 import {SqliteService} from './sqlite.service'
+import {FavoriteService} from './favorite.service'
 import {SearchService} from './search.service'
 import {ViewController} from './view.controller'
-
 
 var app = {
 	// Application Constructor
@@ -17,6 +17,7 @@ var app = {
 	onDeviceReady: function() {
 		this.sqliteService = new SqliteService('dispo.db')
 		this.searchService = new SearchService(this.sqliteService)
+		this.favoriteService = new FavoriteService(this.sqliteService)
 
 		ViewController.show("search");
 
@@ -30,10 +31,11 @@ var app = {
 		this.sqliteService.ready().then(() => {
 			this.searchService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
 			this.searchService.findResources().then((res) => { ViewController.fillResources(res)})
-			this.searchService.findRoom(0).then((res) => { ViewController.renderResultItem(res)})
+			this.favoriteService.find().then((res) => { ViewController.fillFavorites(res)})
 		})
 
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
+		$('[name="button-favorite"]').click(this.favoriteHandler.bind(this));
 		$("#results-list").on("click", ".result-item", event => {
 			const id = $(event.target).closest('.result-item')[0].id;
 			const fn = this.showResultItemHandler.bind(this);
@@ -66,6 +68,22 @@ var app = {
 		this.searchService.find(params)
 			.then((res) => {
 				ViewController.renderSearchResults(res);
+			}).catch((err) => {
+				console.log(err)
+			});
+	},
+	
+	favoriteHandler: function(event){
+		var getInputValue = function(name) { return $(`[name="${name}"]`).val() }
+		var inputs = ['room-name', 'room-type', 'day-of-week', 'start-time', 'end-time']
+		var params = {}
+		inputs.forEach((name) => {
+			var value = getInputValue(name)
+			if(value) params[name] = value
+		});
+		this.favoriteService.add(params)
+			.then((res) => {
+				this.favoriteService.find().then((res) => { ViewController.fillFavorites(res)})
 			}).catch((err) => {
 				console.log(err)
 			});

@@ -89,7 +89,7 @@ export class ViewController {
 			$(res).each((i, item) => {
 				var idTimeslot, day, startTime, endTime;
 				({idTimeslot, day, startTime, endTime} = item);
-				var dayString = this.getDayFromIndex(day);
+				var dayString = this._getDayFromIndex(day);
 				display += `<p>${dayString} de ${startTime}h00 à ${endTime}h00</p>`;
 			});
 			resultItem.append(`<span class="roomTimeslots">` + display + `</span>`);
@@ -100,7 +100,23 @@ export class ViewController {
 		resultItem.find(".roomTimeslots").remove();
 	}
 	
-	static getDayFromIndex(index){
+	static fillFavorites(favorites) {
+		$('#favorites-list').find(".favorite-item").remove();
+		var display = "";
+		$(favorites).each((i, item) => {
+			
+            var idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
+            ({idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
+            var dayString = this._getDayFromIndex(timeslotDay);
+            display += `<div class="favorite-item" data-id="${idFavorite}">
+                            <p>Local ${roomName} (${roomType})</p>
+							<p>${dayString} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+                        </div>`;
+        });
+		$('#favorites-list').append(display);
+	}
+	
+	static _getDayFromIndex(index){
 		switch(index) {
 			case 0: return "dimanche";
 			case 1: return "lundi";
