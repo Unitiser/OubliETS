@@ -165,8 +165,7 @@ var app = {
 				params['start-time'] = favorites[0].timeslotStartTime;
 				params['end-time'] = favorites[0].timeslotEndTime;
 				params['accesses'] = ["all", "software-it", "graduates", "mecanical"]; // TODO
-				params['resources'] = ["television", "computer", "whiteboard"]; // TODO
-				
+				// params['resources'] = ["television", "computer", "whiteboard"]; // TODO
 				this.dispoService.search(params)
 					.then((res) => {
 						ViewController.renderSearchResults(res);
@@ -185,8 +184,8 @@ var app = {
 				params['start-time'] = logs[0].timeslotStartTime;
 				params['end-time'] = logs[0].timeslotEndTime;
 				params['accesses'] = ["all", "software-it", "graduates", "mecanical"]; // TODO
-				params['resources'] = ["television", "computer", "whiteboard"]; // TODO
-				
+				// params['resources'] = ["television", "computer", "whiteboard"]; // TODO
+
 				this.dispoService.search(params)
 					.then((res) => {
 						ViewController.renderSearchResults(res);

@@ -115,6 +115,9 @@ export class DispoService {
 
 	getParamClause(fieldInfo, values) {
 		var getConditionClause = function(field, operator, value) {
+			if (value == null || value == "")
+				return null
+
 			let val = (operator === "LIKE") ? `"%${value}%"` : `"${value}"`
 			return `${field} ${operator} ` + val
 		}
@@ -123,7 +126,9 @@ export class DispoService {
 		if (fieldInfo.type != undefined && fieldInfo.type == 'array') {
 			let c = []
 			$(values).each((i, val) => {
-				c.push(getConditionClause(fieldInfo.field, fieldInfo.operator, val))
+				let condition = getConditionClause(fieldInfo.field, fieldInfo.operator, val)
+				if (condition != null)
+					c.push(condition)
 			})
 
 			if (c.length !== 0) {
