@@ -5,7 +5,7 @@ drop table if exists room_ressource;
 drop table if exists timeslots;
 drop table if exists room_timeslot;
 drop table if exists favorites;
-drop table if exists log;
+drop table if exists logs;
 
 -- Create the tables
 create table rooms (
@@ -52,10 +52,13 @@ create table favorites (
 	timeslotEndTime integer
 );
 
-create table log(
-    idLog integer not null,
-    type char(1) not null,
-    searchJson text not null
+create table logs (
+    idHistory integer PRIMARY KEY,
+	roomName text,
+	roomType text,
+	timeslotDay integer,
+	timeslotStartTime integer,
+	timeslotEndTime integer
 );
 
 
