@@ -105,11 +105,15 @@ export class ViewController {
 		$(favorites).each((i, item) => {
             var idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
             ({idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-            display += `<div class="favorite-item" data-id="${idFavorite}">
-                            <p>Local ${roomName} (${roomType})</p>
-							<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
-							<button type="submit" name="button-remove-favorite">Poubelle</button>
-                        </div>`;
+            display += `<div class="favorite-item" data-id="${idFavorite}">`;
+			if (roomName !== null || roomType !== null) {
+				display += "<p>Local ";
+				display += roomName === null ? " " : roomName;
+				display += roomType === null ? "" : roomType;
+				display += "</p>";
+			}
+			display += `<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+				<button type="submit" name="button-remove-favorite">Poubelle</button></div>`;
         });
 		$('#favorites-list').append(display);
 	}
@@ -128,11 +132,15 @@ export class ViewController {
 		$(logs).each((i, item) => {
             var idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
             ({idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-            display += `<div class="log-item" data-id="${idLog}">
-                            <p>Local ${roomName} (${roomType})</p>
-							<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
-							<button type="submit" name="button-remove-log">Poubelle</button>
-                        </div>`;
+            display += `<div class="log-item" data-id="${idLog}">`;
+			if (roomName !== null || roomType !== null) {
+				display += "<p>Local ";
+				display += roomName === null ? "" : roomName + " ";
+				display += roomType === null ? "" : roomType;
+				display += "</p>";
+			}
+			display += `<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+				<button type="submit" name="button-remove-favorite">Poubelle</button></div>`;
         });
 		$('#logs-list').append(display);
 	}

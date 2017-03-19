@@ -20,6 +20,10 @@ label {
 	color: white;
 }
 
+button[name="button-remove-favorite"], button[name="button-remove-log"] {
+	margin-top: 15px;
+}
+
 #resources label, #accesses label, #softwares label {
 	display: inline;
 }
