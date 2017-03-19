@@ -54,7 +54,7 @@ create table favorites (
 );
 
 create table logs (
-    idHistory integer PRIMARY KEY,
+    idLog integer PRIMARY KEY,
     roomName text,
     roomType text,
     timeslotDay integer,
