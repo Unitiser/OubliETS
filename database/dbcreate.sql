@@ -65,7 +65,10 @@ create table favorites (
     roomType text,
     timeslotDay integer,
     timeslotStartTime integer,
-    timeslotEndTime integer
+    timeslotEndTime integer,
+    accesses text,
+    softwares text,
+    resources text
 );
 
 create table logs (

@@ -60,23 +60,28 @@ export class DispoService {
 			left join room_ressource as rr on rr.idRoom = r.idRoom
 			left join softwares as so on rs.idSoftware = so.idSoftware
 			left join ressources as re on rr.idRessource = re.idRessource `
+		var groupBy = ` group by r.name, t.day, t.startTime, t.endTime`
 		var having = ` having `
 		var havings = []
-		var groupBy = ` group by r.name, t.day, t.startTime, t.endTime`
-		//$("favorites-list").append(select);
+
 		$.each(params, function(key, values) {
 			let clause = self.getParamClause(self.getRealSearchField(key), values)
 			if (clause) havings.push(clause)
 		});
-		var query = select + groupBy + (havings.length ? having + havings.join(' and '): "")
+		var query = select + '\n' + groupBy + (havings.length ? '\n' + having + havings.join(' and '): "")
 		console.log(query)
 
 		return this.sqliteService.run(query, [])
 	}
 
-	addFavorite(params){
-		var q = `insert into favorites (roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime) values (?, ?, ?, ?, ?)`;
-		var p = [params['room-name'], params['room-type'], params['day-of-week'], params['start-time'], params['end-time']];
+	addFavorite(params) {
+		var q = `insert into favorites (
+			roomName, roomType,
+			timeslotDay, timeslotStartTime, timeslotEndTime,
+			accesses, resources, softwares) values (?, ?, ?, ?, ?, ?, ?, ?)`;
+		var p = [params['room-name'], params['room-type'],
+		 	params['day-of-week'], params['start-time'], params['end-time'],
+			params['accesses'], params['resources'], params['softwares'].join(',')];
 		return this.sqliteService.run(q, p);
 	}
 
@@ -85,11 +90,11 @@ export class DispoService {
 	}
 
 	findFavorites(){
-		return this.sqliteService.run(`select idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from favorites`, [])
+		return this.sqliteService.run(`select * from favorites`, [])
 	}
 
 	findFavorite(id){
-		var select = `select idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from favorites where idFavorite = ?`
+		var select = `select * from favorites where idFavorite = ?`
 		return this.sqliteService.run(select, [id])
 	}
 
@@ -122,7 +127,7 @@ export class DispoService {
 
 	getParamClause(fieldInfo, values) {
 		var getConditionClause = function(field, operator, value) {
-			if (value == null || value == "")
+			if (value == undefined)
 				return null
 
 			let val = (operator === "LIKE") ? `"%${value}%"` : `"${value}"`
