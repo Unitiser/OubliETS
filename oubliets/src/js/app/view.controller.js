@@ -38,7 +38,7 @@ export class ViewController {
 		var span = $('<span></span>')
 		span.append('<label for="' + id + '">' + name + '</label>')
 		span.append('<input id="' + id + '" type="checkbox" value="' + value + '"/>')
-
+		
 		return span
 	}
 
