@@ -42,9 +42,9 @@ export class ViewController {
 		var id = name + "_" + value + "_" + Math.random().toString(36).substring(7);
 
 		var span = $('<span></span>')
-		span.append('<input id="' + id + '" type="checkbox" value="' + value + '" class="small-input" />')
-		span.append('<label for="' + id + '" class="small-label">' + name + '</label>')
-
+		span.append('<label for="' + id + '">' + name + '</label>')
+		span.append('<input id="' + id + '" type="checkbox" value="' + value + '"/>')
+		
 		return span
 	}
 
@@ -104,18 +104,31 @@ export class ViewController {
 	static unrenderRoomTimeslots(resultItem){
 		resultItem.find(".roomTimeslots").remove();
 	}
-
+	
+	static renderFavoriteAddedMessage(){
+		$('[name="button-favorite"]').after("<p class='favorite-added-msg'>Cette recherche est maintenant dans vos favoris</p>");
+		$(".favorite-added-msg").animate({
+			opacity: 0
+		}, 2000, function() {
+			$(".favorite-added-msg").remove();
+		});
+	}
+	
 	static fillFavorites(favorites) {
 		$('#favorites-list').find(".favorite-item").remove();
 		var display = "";
 		$(favorites).each((i, item) => {
             var idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
             ({idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-            display += `<div class="favorite-item" data-id="${idFavorite}">
-                            <p>Local ${roomName} (${roomType})</p>
-							<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
-							<button type="submit" name="button-remove-favorite">Poubelle</button>
-                        </div>`;
+            display += `<div class="favorite-item" data-id="${idFavorite}">`;
+			if (roomName !== null || roomType !== null) {
+				display += "<p>Local ";
+				display += roomName === null ? " " : roomName;
+				display += roomType === null ? "" : roomType;
+				display += "</p>";
+			}
+			display += `<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+				<button type="submit" name="button-remove-favorite">Poubelle</button></div>`;
         });
 		$('#favorites-list').append(display);
 	}
@@ -134,11 +147,15 @@ export class ViewController {
 		$(logs).each((i, item) => {
             var idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
             ({idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-            display += `<div class="log-item" data-id="${idLog}">
-                            <p>Local ${roomName} (${roomType})</p>
-							<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
-							<button type="submit" name="button-remove-log">Poubelle</button>
-                        </div>`;
+            display += `<div class="log-item" data-id="${idLog}">`;
+			if (roomName !== null || roomType !== null) {
+				display += "<p>Local ";
+				display += roomName === null ? "" : roomName + " ";
+				display += roomType === null ? "" : roomType;
+				display += "</p>";
+			}
+			display += `<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+				<button type="submit" name="button-remove-favorite">Poubelle</button></div>`;
         });
 		$('#logs-list').append(display);
 	}
