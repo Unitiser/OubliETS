@@ -74,38 +74,31 @@ export class DispoService {
 		return this.sqliteService.run(query, [])
 	}
 
-	addFavorite(params) {
-		var q = `insert into favorites (
+	addLog(params) {
+		var q = `insert into logs (
 			roomName, roomType,
 			timeslotDay, timeslotStartTime, timeslotEndTime,
-			accesses, resources, softwares) values (?, ?, ?, ?, ?, ?, ?, ?)`;
+			accesses, resources, softwares, isFavorite) values (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 		var p = [params['room-name'], params['room-type'],
 		 	params['day-of-week'], params['start-time'], params['end-time'],
-			params['accesses'], params['resources'], params['softwares'].join(',')];
-		return this.sqliteService.run(q, p);
+			params['accesses'], params['resources'], params['softwares'].join(','), 0];
+		return this.sqliteService.run(q, p, false);
+	}
+
+	addFavorite(id) {
+		return this.sqliteService.run(`update logs set isFavorite=1 where idLog = ?`, [id]);
 	}
 
 	removeFavorite(id){
-		return this.sqliteService.run(`delete from favorites where idFavorite = ?`, [id]);
+		return this.sqliteService.run(`update logs set isFavorite=0 where idLog = ?`, [id]);
 	}
 
 	findFavorites(){
-		return this.sqliteService.run(`select * from favorites`, [])
-	}
-
-	findFavorite(id){
-		var select = `select * from favorites where idFavorite = ?`
-		return this.sqliteService.run(select, [id])
+		return this.sqliteService.run(`select * from logs where isFavorite=1`, [])
 	}
 
 	clearFavorites(){
-		return this.sqliteService.run(`delete from favorites`)
-	}
-
-	addLog(params){
-		var q = `insert into logs (roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime) values (?, ?, ?, ?, ?)`;
-		var p = [params['room-name'], params['room-type'], params['day-of-week'], params['start-time'], params['end-time']];
-		return this.sqliteService.run(q, p);
+		return this.sqliteService.run(`update logs set isFavorite=0`)
 	}
 
 	removeLog(id){
@@ -113,16 +106,16 @@ export class DispoService {
 	}
 
 	findLog(id){
-		var select = `select idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from logs where idLog = ?`
+		var select = `select * from logs where idLog = ?`
 		return this.sqliteService.run(select, [id])
 	}
 
 	findLogs(){
-		return this.sqliteService.run(`select idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime from logs`, [])
+		return this.sqliteService.run(`select * from logs`, [])
 	}
 
 	clearLogs(){
-		return this.sqliteService.run(`delete from logs`)
+		return this.sqliteService.run(`delete from logs where isFavorite=0`)
 	}
 
 	getParamClause(fieldInfo, values) {

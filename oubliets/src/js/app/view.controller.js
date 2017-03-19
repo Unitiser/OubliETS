@@ -53,9 +53,10 @@ export class ViewController {
         $(views).each((i, v) => { $("#" + v).hide() });
     }
 
-    static renderSearchResults(searchResults){
+    static renderSearchResults(searchResults, idLog){
         var display = "";
         $("#results-list").empty();
+        $("#results-list").attr("data-id", idLog)
 
         if(!searchResults.length) display = `<p>${Labels.noResults}</p>`;
 

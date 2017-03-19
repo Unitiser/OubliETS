@@ -15,6 +15,10 @@ export class SqliteService {
 		return window.sqlitePlugin.openDatabase({name: dbname, location: 'default'})
 	}
 
+	closeDatabase() {
+		this.db.close()
+	}
+
 	// Delete old version and create new from preset db file.
 	resetDatabase(dbname) {
 		// Remove old version of DB
@@ -49,11 +53,11 @@ export class SqliteService {
 		}
 	}
 
-	run(query, args = []) {
+	run(query, args = [], isRows = true) {
 		var self = this;
 		return new Promise((resolve, error) => {
 			self.db.executeSql(query, args,
-				(res) => resolve(self.extractQueryResults(res)), error)
+				(res) =>{ resolve((isRows) ? self.extractQueryResults(res) : res.insertId)}, error)
 			}
 		);
 	}
