@@ -99,6 +99,15 @@ export class ViewController {
 		resultItem.find(".roomTimeslots").remove();
 	}
 	
+	static renderFavoriteAddedMessage(){
+		$('[name="button-favorite"]').after("<p class='favorite-added-msg'>Cette recherche est maintenant dans vos favoris</p>");
+		$(".favorite-added-msg").animate({
+			opacity: 0
+		}, 2000, function() {
+			$(".favorite-added-msg").remove();
+		});
+	}
+	
 	static fillFavorites(favorites) {
 		$('#favorites-list').find(".favorite-item").remove();
 		var display = "";

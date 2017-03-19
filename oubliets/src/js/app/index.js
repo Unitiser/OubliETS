@@ -108,7 +108,8 @@ var app = {
 		});
 		this.dispoService.addFavorite(params)
 			.then((res) => {
-				this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
+				this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)});
+				ViewController.renderFavoriteAddedMessage();
 			}).catch((err) => {
 				console.log(err)
 			});

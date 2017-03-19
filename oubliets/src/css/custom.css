@@ -20,6 +20,10 @@ label {
 	color: white;
 }
 
+.favorite-added-msg {
+	margin-bottom: 0;
+}
+
 button[name="button-remove-favorite"], button[name="button-remove-log"] {
 	margin-top: 15px;
 }
