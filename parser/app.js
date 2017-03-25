@@ -1,5 +1,6 @@
 var fs = require('fs');
 var PDFParser = require('pdf2json');
+var sqlite3 = require('sqlite3').verbose();
 
 var pdfParser = new PDFParser();
 
@@ -8,6 +9,7 @@ let LOCAL_REGEX = /^[ABE]-[0-9]{4}$/;
 let CLASS_REGEX = /^[A-Z]{3}[0-9]{3}$/;
 
 var DATA = {};
+var db = new sqlite3.Database('../oubliets/src/dispo.db');
 
 var pdfs = fs.readdirSync('./pdfs/');
 parseNext();
@@ -15,6 +17,7 @@ parseNext();
 function parseNext() {
     if(pdfs.length == 0) {
         printData();
+        insertDataIntoDb();
     }
     else {
         var pdf = pdfs.pop();
@@ -108,26 +111,129 @@ function parsePdfData(pdfData) {
                 // for multi local lines, i.e 'A-0610, A-3608'
                 forLocals = text.split(', ');
                 for(var local of forLocals) {
-                    if(DATA[local] == undefined) {
-                        DATA[local] = {
-                            'Lun': [],
-                            'Mar': [],
-                            'Mer': [],
-                            'Jeu': [],
-                            'Ven': [],
-                        };
-                    }
-                    if(DATA[local][forDay] == undefined) {
-                        console.error(`Unable to add period '${forPeriod}' for local = '${local}' and day = '${forDay}' (invalid day)`);
-                    }
-                    else {
-                        if(DATA[local][forDay].indexOf(forPeriod) == -1) {
-                            DATA[local][forDay].push(forPeriod);
-                            console.log(`Adding '${forPeriod}' for day '${forDay}' for class '${forClass}' to local '${local}'`);
-                        }
-                    }
+                    insertData(local, forDay, forPeriod, forClass);
                 }
             }
         }
+    }
+}
+
+function insertData(local, day, period, classSigil) {
+    if(DATA[local] == undefined) {
+        let emptyDay = buildDayArray();
+        DATA[local] = {
+            0 : emptyDay,
+            1 : emptyDay,
+            2 : emptyDay,
+            3 : emptyDay,
+            4 : emptyDay,
+            5 : emptyDay,
+            6 : emptyDay
+        };
+    }
+    day = convertDay(day);
+    if(DATA[local][day] == undefined) {
+        console.error(`Unable to add period '${period}' for local = '${local}' and day = '${day}' (invalid day)`);
+    }
+    else {
+        let hoursBusy = convertPeriod(period);
+        if(hoursBusy != undefined) {
+            for(let hour of hoursBusy) {
+                let index = DATA[local][day].indexOf(hour);
+                if(index != -1)
+                    DATA[local][day].splice(index, 1); // remove the time from available hours
+            }
+            DATA[local][day].sort((a,b) => parseInt(a) > parseInt(b));
+            console.log(`Removing '${period}' for day '${day}' for class '${classSigil}' to local '${local}'`);
+        }
+    }
+}
+
+function convertPeriod(raw_period) {
+    let parts = HOUR_REGEX.exec(raw_period);
+    if(parts != undefined && parts.length >= 4) {
+        let start = parseInt(parts[1]);
+        let end =  parseInt(parts[3]);
+        let res = [];
+        for(; start <= end; start++)
+        {
+            res.push(start);
+        }
+        // console.log(`From ${raw_period} to ${res}`);
+        return res;
+    }
+    else
+    {
+        console.log(`unable to convert period '${raw_period}'`);
+        return undefined;
+    }
+
+}
+
+function convertDay(raw_day) {
+    switch(raw_day) {
+        case 'Sun': return 0;
+        case 'Lun': return 1;
+        case 'Mar': return 2;
+        case 'Mer': return 3;
+        case 'Jeu': return 4;
+        case 'Ven': return 5;
+        case 'Sat': return 6;
+    }
+}
+
+function buildDayArray() {
+    let startTime = 7;
+    let endTime = 21;
+    let res = [];
+    for(let time = startTime; time <= endTime; time++)
+    {
+        res.push(time);
+    }
+    return res;
+}
+
+function insertDataIntoDb() {
+
+    db.run(`DELETE FROM timeslots`);
+    db.run(`DELETE FROM rooms`);
+    db.run(`DELETE FROM room_timeslot`);
+    for(var i = 0; i <= 6; ++i){
+		for (var j = 8; j < 24; ++j){
+			db.run(`insert into timeslots (day, startTime, endTime) values (?, ?, ?)`, [i, j, j+1]);
+		}
+	}
+
+    for(let local in DATA) {
+        let localDays = DATA[local];
+        let insertRoomSql = `INSERT INTO rooms (access, name, type) VALUES ("access", "${local}", "type")`;
+        db.run(insertRoomSql);
+        let stmt = db.prepare(`SELECT idRoom FROM rooms WHERE name="${local}"`); // sqlite3's this.lastID not working
+        stmt.get((err, row) => {
+            var idRoom = row.idRoom;
+            //console.log("Added room", idRoom);
+            for(let day in localDays)
+            {
+                let dayHours = localDays[day];
+                //let insertTimeslotSql = `INSERT INTO timeslots (day, startTime, endTime) VALUES (${day}, 12, 17)`;
+                //console.log(dayHours);
+                for(let freeHour of dayHours) {
+                    //console.log(`Selecting: SELECT idTimeslot FROM timeslots WHERE day=${day} AND startTime=${freeHour}`);
+                    db.get(`SELECT idTimeslot FROM timeslots WHERE day=${day} AND startTime=${freeHour}`, (err, row) => {
+                        if(row) {
+                            let insertRoomSlotSql = `INSERT INTO room_timeslot (idRoom, idTimeslot) VALUES (${idRoom},${row.idTimeslot})`;
+                            console.log(insertRoomSlotSql);
+                            db.run(insertRoomSlotSql);
+                        }
+                    });
+                }
+                /*db.run(insertTimeslotSql, () => {
+                    let idTimeSlot = this.lastID;
+
+                });*/
+
+            }
+        });
+
     }
 }
