@@ -131,7 +131,7 @@ export class DispoService {
 			'accesses': { 'field' : 'r.access', 'operator' : '=', 'type': 'array', 'arrayOperator': 'or'},
 			'resources': { 'field' : 'res', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
 			'softwares': { 'field' : 'sof', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
-			'room-name' : { 'field' : 'r.name', 'operator' : '=' },
+			'room-name' : { 'field' : 'r.name', 'operator' : 'LIKE' },
 			'start-time' : { 'field' : 't.startTime', 'operator' : '<=' },
 			'end-time' : { 'field' : 't.endTime', 'operator' : '>=' },
 			'room-type' : { 'field' : 'r.type', 'operator' : '=' },
