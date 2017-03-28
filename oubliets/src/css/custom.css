@@ -79,6 +79,10 @@ button[name="button-remove-favorite"], button[name="button-remove-log"] {
   font-size: 25px;
 }
 
+.list-item-action span{
+  padding: 0px 5px;
+}
+
 .list-item-label{
   padding: 10px;
   display: inline-block;

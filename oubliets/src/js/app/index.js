@@ -17,7 +17,8 @@ var app = {
 		this.sqliteService = new SqliteService('dispo.db')
 		this.dispoService = new DispoService(this.sqliteService)
 
-		ViewController.show("search");
+		this._clearParamsInput()
+		ViewController.show("search")
 
  		// Hookup functionalities
 		$(".navbar-item a").click((event) => {
@@ -42,29 +43,30 @@ var app = {
 		$('[name="button-clear-logs"]').click(this.clearLogsHandler.bind(this));
 		$("#results-list").on("click", ".result-item", event => {
 			const id = $(event.target).closest('.result-item').attr("data-id");
-			const fn = this.showResultItemHandler.bind(this);
-			fn(id);
+			this.showResultItemHandler.call(this, id);
 		});
-		$("#favorites-list").on("click", ".list-item-label", event => {
+		$("#favorites-list").on("click", ".list-item-label, .list-item-load", event => {
 			const id = $(event.target).closest('.list-item').attr("data-id");
-			const fn = this.searchFromFavoriteHandler.bind(this);
-			fn(id);
+			this.searchFromFavoriteHandler.call(this, id);
 		});
 		$("#favorites-list").on("click", ".list-item-remove", event => {
 			const id = $(event.target).parent().parent().attr("data-id");
-			const fn = this.removeFavoriteHandler.bind(this);
-			fn(id);
+			this.removeFavoriteHandler.call(this, id);
 		});
-		$("#logs-list").on("click", ".list-item-label", event => {
+		$("#logs-list").on("click", ".list-item-label, .list-item-load", event => {
 			const id = $(event.target).closest('.list-item').attr("data-id");
-			const fn = this.searchFromLogHandler.bind(this);
-			fn(id);
+			this.searchFromLogHandler.call(this, id);
 		});
 		$("#logs-list").on("click", ".list-item-remove", event => {
 			const id = $(event.target).parent().parent().attr("data-id");
-			const fn = this.removeLogHandler.bind(this);
-			fn(id);
+			this.removeLogHandler.call(this, id);
 		});
+		$("#logs-list, #favorites-list").on("click", ".list-item-edit", event => {
+			const id = $(event.target).parent().parent().attr("data-id");
+			this.editHandler.call(this, id);
+		});
+
+		$("#clear-search").on("click", this._clearParamsInput.bind(this))
 	},
 
 	_getParamsFromInputs: function() {
@@ -92,6 +94,31 @@ var app = {
 		});
 
 		return params
+	},
+
+	_fillParamsInput: function(params){
+		$.each(params, (k, val) => {
+			if(Array.isArray(val)){
+				$.each(val, (k, val) => {
+					$(`[value="${val}"]`).prop("checked", true)	
+				})
+			}else{
+				$(`[name="${k}"]`).val(val)
+			}
+		})
+	},
+
+	_clearParamsInput: function(e){
+		$(`input[type="text"]`).val("")
+		$(`select`).val("")
+		$(`input[type="checkbox"]`).prop("checked", false)
+		var now = new Date();
+		this._fillParamsInput({
+			"start-time" : now.getHours(),
+			"end-time" : now.getHours() + 1,
+			"day-of-week" : now.getDay()
+		})
+		$("body,html").scrollTop(0);
 	},
 
 	searchHandler: function(event){
@@ -200,13 +227,21 @@ var app = {
 	searchFromLogHandler: function(id){
 		this.dispoService.findLog(id)
 			.then((logs) => {
-				console.log(logs)
 				this.dispoService.search(this._getParamsFromSearchItem(logs[0]))
 					.then((res) => {
 						ViewController.renderSearchResults(res, id);
 					});
 			});
 	},
+
+	editHandler : function(id){
+		this.dispoService.findLog(id)
+			.then((res) => {
+				this._fillParamsInput(res[0])
+				ViewController.show("search")
+			})
+	}
 };
 
 app.initialize()
+window.gaay = app

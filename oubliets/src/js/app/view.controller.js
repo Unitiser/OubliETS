@@ -11,15 +11,6 @@ export class ViewController {
         $(".navbar-item").removeClass("active");
         $(`a[href="#${name}"]`).parent().addClass("active");
         $("body,html").scrollTop(0);
-
-        switch(name){
-            case "search":
-                var now = new Date();
-                $('input[name=start-time]').val(now.getHours())
-                $('input[name=end-time]').val(now.getHours() + 1)
-			    $('select[name=day-of-week]').val(now.getDay())
-            break;
-        }
     }
 
     static hideAll(){
@@ -165,6 +156,8 @@ export class ViewController {
 
         return `<div class="list-item" data-id="${idLog}">
             <div class="list-item-action">
+                <span class="list-item-load fa fa-external-link"></span>
+                <span class="list-item-edit fa fa-pencil"></span>
                 <span class="list-item-remove fa fa-trash"></span>
             </div>
             <div class="list-item-label">
