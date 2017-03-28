@@ -148,7 +148,7 @@ export class DispoService {
 
 	getRealSearchField(name){
 		let mapping = {
-			'accesses': { 'field' : 'r.access', 'operator' : '=', 'type': 'array', 'arrayOperator': 'or'}, // This is a proposition ... we should probably find something better.
+			'accesses': { 'field' : 'r.access', 'operator' : '=', 'type': 'array', 'arrayOperator': 'or'},
 			'resources': { 'field' : 'res', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
 			'softwares': { 'field' : 'sof', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
 			'room-name' : { 'field' : 'r.name', 'operator' : '=' },

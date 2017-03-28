@@ -118,7 +118,7 @@ export class ViewController {
 	static fillFavorites(favorites) {
 		$('#favorites-list').find(".favorite-item").remove();
 		var display = "";
-		$(favorites).each((i, item) => {
+        $(favorites).each((i, item) => {
             var idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
             ({idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
             display += `<div class="favorite-item" data-id="${idFavorite}">`;

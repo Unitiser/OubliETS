@@ -96,22 +96,35 @@ var app = {
 
 	searchHandler: function(event){
 		var params = this._getParamsFromInputs()
+		var searchResults;
+		var logId;
+
 		this.dispoService.search(params)
-		.then((res) => {
-			ViewController.renderSearchResults(res);
-			this.dispoService.addLog(params)
-				.then((res) => {
-					this.dispoService.findLogs().then((res) => { ViewController.fillLogs(res) })
-				});
-		});
+			.then((rooms) => {
+				searchResults = rooms;
+				return this.dispoService.addLog(params)
+			})
+			.then((id) => {
+				logId = id;
+				return this.dispoService.findLogs()
+			})
+			.then((logs) => {
+				ViewController.fillLogs(logs)
+				ViewController.renderSearchResults(searchResults, logId);
+			})
+			.catch((e) => console.log(e));
 	},
 
 	favoriteHandler: function(event){
-		this.dispoService.addFavorite(this._getParamsFromInputs())
+		this.dispoService.addFavorite($("#results-list").attr("data-id"))
 			.then((res) => {
-				this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)});
+				return this.dispoService.findFavorites()
+			})
+			.then((res) => { 
+				ViewController.fillFavorites(res)
 				ViewController.renderFavoriteAddedMessage();
-			}).catch((err) => {
+			})
+			.catch((err) => {
 				console.log(err)
 			});
 	},

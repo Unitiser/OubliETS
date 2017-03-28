@@ -8,6 +8,11 @@ export class SqliteService {
 
 		// Open database connection
 		this.db = this.openDatabase(dbname)
+
+		window.sqliteservice1 = this
+		$(window).bind('beforeunload', () => {
+			this.closeDatabase()
+		});
 	}
 
 	// Open database connection
