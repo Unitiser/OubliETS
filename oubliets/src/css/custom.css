@@ -45,18 +45,21 @@ button[name="button-remove-favorite"], button[name="button-remove-log"] {
 	margin-left: 6px;
 }
 
-.result-item, .favorite-item, .log-item{
+.result-item, .favorite-item, .list-item{
     background-color: white;
     text-align: left;
-    padding: 5px 20px 5px 20px;
     margin-bottom: 5px;
+}
+
+.result-item{
+    padding: 5px 20px 5px 20px;
 }
 
 .result-item h3{
   font-size: 110%;
 }
 
-.result-item h3, .result-item p, .favorite-item p, .log-item p {
+.result-item h3, .list-item p {
     margin-bottom: 0;
 }
 
@@ -67,4 +70,16 @@ button[name="button-remove-favorite"], button[name="button-remove-log"] {
 .small-label {
   display: inline;
   padding: 5px;
+}
+.list-item-action{
+  float: right;
+  line-height: 1;
+  padding: 10px;
+  display: block;
+  font-size: 25px;
+}
+
+.list-item-label{
+  padding: 10px;
+  display: inline-block;
 }

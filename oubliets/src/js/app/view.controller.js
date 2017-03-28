@@ -1,6 +1,9 @@
 import {Labels} from "./labels"
 
 export class ViewController {
+    /*
+     *          NAVIGATION
+     */
 
     static show(name){
         this.hideAll();
@@ -19,6 +22,14 @@ export class ViewController {
         }
     }
 
+    static hideAll(){
+        let views = ["search", "history", "results", "favorites"];
+        $(views).each((i, v) => { $("#" + v).hide() });
+    }
+
+    /*
+     *          SEARCH VIEW
+     */
 	static fillAccesses(accesses) {
 		$(accesses).each((i, access) => {
 			let a = access.access
@@ -48,10 +59,9 @@ export class ViewController {
 		return span
 	}
 
-    static hideAll(){
-        let views = ["search", "history", "results", "favorites"];
-        $(views).each((i, v) => { $("#" + v).hide() });
-    }
+    /*
+     *          SEARCH RESULTS VIEW
+     */
 
     static renderSearchResults(searchResults, idLog){
         var display = "";
@@ -106,6 +116,10 @@ export class ViewController {
 		resultItem.find(".roomTimeslots").remove();
 	}
 	
+    /*
+     *          LOG / FAVORITES VIEW
+     */
+
 	static renderFavoriteAddedMessage(){
 		$('[name="button-favorite"]').after("<p class='favorite-added-msg'>Cette recherche est maintenant dans vos favoris</p>");
 		$(".favorite-added-msg").animate({
@@ -116,50 +130,49 @@ export class ViewController {
 	}
 	
 	static fillFavorites(favorites) {
-		$('#favorites-list').find(".favorite-item").remove();
+		$('#favorites-list').find(".list-item").remove();
 		var display = "";
+        var fn = this.renderLogEntry
+
         $(favorites).each((i, item) => {
-            var idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
-            ({idFavorite, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-            display += `<div class="favorite-item" data-id="${idFavorite}">`;
-			if (roomName !== null || roomType !== null) {
-				display += "<p>Local ";
-				display += roomName === null ? " " : roomName;
-				display += roomType === null ? "" : roomType;
-				display += "</p>";
-			}
-			display += `<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
-				<button type="submit" name="button-remove-favorite">Poubelle</button></div>`;
+            display += fn(item)
         });
 		$('#favorites-list').append(display);
 	}
 
-	static unrenderFavorites() {
-		$('#favorites-list').find(".favorite-item").remove();
-	}
-
-	static unrenderFavorite(id){
-		$('#favorites-list').find("[data-id="+id+"]").remove();
-	}
-
 	static fillLogs(logs) {
-		$('#logs-list').find(".log-item").remove();
+		$('#logs-list').find(".list-item").remove();
 		var display = "";
-		$(logs).each((i, item) => {
-            var idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
-            ({idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-            display += `<div class="log-item" data-id="${idLog}">`;
-			if (roomName !== null || roomType !== null) {
-				display += "<p>Local ";
-				display += roomName === null ? "" : roomName + " ";
-				display += roomType === null ? "" : roomType;
-				display += "</p>";
-			}
-			display += `<p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
-				<button type="submit" name="button-remove-favorite">Poubelle</button></div>`;
+        var fn = this.renderLogEntry
+		
+        $(logs).each((i, item) => {
+            display += fn(item)
         });
+
 		$('#logs-list').append(display);
 	}
+
+    static renderLogEntry(item){
+        var idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
+        ({idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
+        var locals = ''
+
+        if (roomName !== null || roomType !== null) {
+            locals = `<p>
+                        Local ${roomName === null ? "" : roomName + " "}${roomType === null ? "" : roomType}
+                     </p>`
+        }
+
+        return `<div class="list-item" data-id="${idLog}">
+            <div class="list-item-action">
+                <span class="list-item-remove fa fa-trash"></span>
+            </div>
+            <div class="list-item-label">
+                ${locals}
+                <p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+            </div>
+        </div>`
+    }
 
 	static unrenderLogs() {
 		$('#logs-list').find(".log-item").remove();
@@ -168,4 +181,12 @@ export class ViewController {
 	static unrenderLog(id){
 		$('#logs-list').find("[data-id="+id+"]").remove();
 	}
+
+    static unrenderFavorites() {
+        $('#favorites-list').find(".favorite-item").remove();
+    }
+
+    static unrenderFavorite(id){
+        $('#favorites-list').find("[data-id="+id+"]").remove();
+    }
 }

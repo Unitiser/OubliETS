@@ -45,23 +45,23 @@ var app = {
 			const fn = this.showResultItemHandler.bind(this);
 			fn(id);
 		});
-		$("#favorites-list").on("click", ".favorite-item", event => {
-			const id = $(event.target).closest('.favorite-item').attr("data-id");
+		$("#favorites-list").on("click", ".list-item-label", event => {
+			const id = $(event.target).closest('.list-item').attr("data-id");
 			const fn = this.searchFromFavoriteHandler.bind(this);
 			fn(id);
 		});
-		$("#favorites-list").on("click", "[name='button-remove-favorite']", event => {
-			const id = $(event.target).parent().attr("data-id");
+		$("#favorites-list").on("click", ".list-item-remove", event => {
+			const id = $(event.target).parent().parent().attr("data-id");
 			const fn = this.removeFavoriteHandler.bind(this);
 			fn(id);
 		});
-		$("#logs-list").on("click", ".log-item", event => {
-			const id = $(event.target).closest('.log-item').attr("data-id");
+		$("#logs-list").on("click", ".list-item-label", event => {
+			const id = $(event.target).closest('.list-item').attr("data-id");
 			const fn = this.searchFromLogHandler.bind(this);
 			fn(id);
 		});
-		$("#logs-list").on("click", "[name='button-remove-log']", event => {
-			const id = $(event.target).parent().attr("data-id");
+		$("#logs-list").on("click", ".list-item-remove", event => {
+			const id = $(event.target).parent().parent().attr("data-id");
 			const fn = this.removeLogHandler.bind(this);
 			fn(id);
 		});
@@ -188,11 +188,11 @@ var app = {
 	},
 
 	searchFromFavoriteHandler: function(id) {
-		this.dispoService.findFavorite(id)
+		this.dispoService.findFavorites(id)
 			.then((favorites) => {
 				this.dispoService.search(this._getParamsFromSearchItem(favorites[0]))
 					.then((res) => {
-						ViewController.renderSearchResults(res);
+						ViewController.renderSearchResults(res, id);
 					});
 			});
 	},
@@ -200,9 +200,10 @@ var app = {
 	searchFromLogHandler: function(id){
 		this.dispoService.findLog(id)
 			.then((logs) => {
+				console.log(logs)
 				this.dispoService.search(this._getParamsFromSearchItem(logs[0]))
 					.then((res) => {
-						ViewController.renderSearchResults(res);
+						ViewController.renderSearchResults(res, id);
 					});
 			});
 	},
