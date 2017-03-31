@@ -206,11 +206,11 @@ function insertDataIntoDb() {
 
     for(let local in DATA) {
         let localDays = DATA[local];
-        let insertRoomSql = `INSERT INTO rooms (access, name, type) VALUES ("access", "${local}", "lab")`;
+        let insertRoomSql = `INSERT INTO rooms (access, name, type) VALUES ("all", "${local}", "lab")`;
         db.run(insertRoomSql);
         let stmt = db.prepare(`SELECT idRoom FROM rooms WHERE name="${local}"`); // sqlite3's this.lastID not working
         stmt.get((err, row) => {
-            if(err) {
+            if(err || !row) {
                 console.error("Unable to add (or get id) of room:", err);
                 return;
             }
