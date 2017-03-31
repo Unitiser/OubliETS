@@ -17,7 +17,7 @@ var app = {
 		this.sqliteService = new SqliteService('dispo.db')
 		this.dispoService = new DispoService(this.sqliteService)
 
-		this._clearParamsInput()
+
 		ViewController.show("search")
 
  		// Hookup functionalities
@@ -28,12 +28,21 @@ var app = {
 		});
 
 		// App launch data
+		var self = this;
 		this.sqliteService.ready().then(() => {
 			this.dispoService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
 			this.dispoService.findResources().then((res) => { ViewController.fillResources(res)})
 			this.dispoService.findSoftwares().then((res) => { ViewController.fillSoftwares(res)})
 			this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
-			this.dispoService.findLogs().then((res) => { ViewController.fillLogs(res)})
+			this.dispoService.findLogs().then((res) => { 
+				if(res.length){
+					self._fillParamsInput(self._getParamsFromSearchItem(res[0]))
+				}else{
+					self._clearParamsInput()
+				}
+				ViewController.fillLogs(res)
+
+			})
 		})
 
 		// Events
