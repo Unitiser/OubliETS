@@ -146,12 +146,21 @@ export class ViewController {
     static renderLogEntry(item){
         var idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
         ({idLog, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-        var locals = ''
+        var locals = '',
+            time = ''
 
         if (roomName !== null || roomType !== null) {
             locals = `<p>
                         Local ${roomName === null ? "" : roomName + " "}${roomType === null ? "" : roomType}
                      </p>`
+        }
+
+        if (timeslotStartTime && timeslotEndTime){
+            time = `de ${timeslotStartTime}h00 à ${timeslotEndTime}h00`
+        }else if(timeslotStartTime){
+            time = `à partir de ${timeslotStartTime}h00`
+        }else if(timeslotEndTime){
+            time = `avant ${timeslotEndTime}h00`
         }
 
         return `<div class="list-item" data-id="${idLog}">
@@ -162,7 +171,7 @@ export class ViewController {
             </div>
             <div class="list-item-label">
                 ${locals}
-                <p>${Labels.day[timeslotDay]} de ${timeslotStartTime}h00 à ${timeslotEndTime}h00</p>
+                <p>${Labels.day[timeslotDay]} ${time}</p>
             </div>
         </div>`
     }

@@ -4,7 +4,7 @@ export class SqliteService {
 
 		// TODO: We should probably find a way to avoid doing this everytime ...
 		//       If we store new stuff (favorites and whatnot) they will be erased
-		this.resetDatabase(dbname)
+		// this.resetDatabase(dbname)
 
 		// Open database connection
 		this.db = this.openDatabase(dbname)
@@ -17,7 +17,8 @@ export class SqliteService {
 
 	// Open database connection
 	openDatabase(dbname) {
-		return window.sqlitePlugin.openDatabase({name: dbname, location: 'default'})
+		var self = this
+		return window.sqlitePlugin.openDatabase({name: dbname, location: 'default'}, () => self._ready = true)
 	}
 
 	closeDatabase() {

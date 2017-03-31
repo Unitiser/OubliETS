@@ -74,7 +74,7 @@ export class DispoService {
 	}
 
 	findFavorites(){
-		return this.sqliteService.run(`select * from logs where isFavorite=1`, [])
+		return this.sqliteService.run(`select * from logs where isFavorite=1 order by idLog desc`, [])
 	}
 
 	clearFavorites(){
@@ -91,7 +91,7 @@ export class DispoService {
 	}
 
 	findLogs(){
-		return this.sqliteService.run(`select * from logs`, [])
+		return this.sqliteService.run(`select * from logs order by idLog desc`, [])
 	}
 
 	clearLogs(){
