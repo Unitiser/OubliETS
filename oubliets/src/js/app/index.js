@@ -6,6 +6,8 @@ import {RessourceService} from './service/ressource.service'
 import {RoomService} from './service/room.service'
 import {SoftwareService} from './service/software.service'
 
+import { SearchController } from './search/search.controller'
+
 var app = {
 	// Application Constructor
 	initialize: function() {
@@ -26,9 +28,7 @@ var app = {
 		});
 
 		// App launch data
-		this.ressourceService.list().then((res) => { ViewController.fillResources(res)})
-		this.roomService.listAccess().then((res) => { ViewController.fillAccesses(res)})
-		this.softwareService.list().then((res) => { ViewController.fillSoftwares(res)})
+
 		// this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
 		// this.dispoService.findLogs().then((res) => { 
 		// 	if(res.length){
@@ -38,9 +38,16 @@ var app = {
 		// 	}
 		// 	ViewController.fillLogs(res)
 		// })
+		
+		// Init controllers
+		let searchCtrl = new SearchController(this.roomService,
+											  this.softwareService,
+											  this.ressourceService,
+											  undefined);
 
 		// Events
-		$('[name="button-search"]').click(this.searchHandler.bind(this));
+		
+		// Favorite stuff
 		$('[name="button-favorite"]').click(this.favoriteHandler.bind(this));
 		$('[name="button-clear-favorites"]').click(this.clearFavoritesHandler.bind(this));
 		$('[name="button-clear-logs"]').click(this.clearLogsHandler.bind(this));
@@ -56,6 +63,8 @@ var app = {
 			const id = $(event.target).parent().parent().attr("data-id");
 			this.removeFavoriteHandler.call(this, id);
 		});
+
+		// Log stuff
 		$("#logs-list").on("click", ".list-item-label, .list-item-load", event => {
 			const id = $(event.target).closest('.list-item').attr("data-id");
 			this.searchFromLogHandler.call(this, id);
@@ -68,81 +77,6 @@ var app = {
 			const id = $(event.target).parent().parent().attr("data-id");
 			this.editHandler.call(this, id);
 		});
-
-		$("#clear-search").on("click", this._clearParamsInput.bind(this))
-	},
-
-	_getParamsFromInputs: function() {
-		var getInputValue = function(name) { return $(`[name="${name}"]`).val() }
-		var getInputArray = function(name) {
-			let items = []
-			$(`#${name} :input:checked`).each(function () {
-				items.push(this.value)
-			})
-			return items
-		}
-		var inputs = [
-			['room-name', 'string'], ['day-of-week', 'string'],
-			['start-time' , 'string'], ['end-time', 'string'],
-			['room-type', 'string'], ['accesses', 'array'],
-			['resources', 'array'], ['softwares', 'array']
-		]
-
-		var params = {}
-		inputs.forEach((input) => {
-			var value = (input[1] === 'array') ? getInputArray(input[0]) : getInputValue(input[0])
-			if (value) {
-				params[input[0]] = value
-			}
-		});
-
-		return params
-	},
-
-	_fillParamsInput: function(params){
-		$.each(params, (k, val) => {
-			if(Array.isArray(val)){
-				$.each(val, (k, val) => {
-					$(`[value="${val}"]`).prop("checked", true)	
-				})
-			}else{
-				$(`[name="${k}"]`).val(val)
-			}
-		})
-	},
-
-	_clearParamsInput: function(e){
-		$(`input[type="text"]`).val("")
-		$(`select`).val("")
-		$(`input[type="checkbox"]`).prop("checked", false)
-		var now = new Date();
-		this._fillParamsInput({
-			"start-time" : now.getHours(),
-			"end-time" : now.getHours() + 1,
-			"day-of-week" : now.getDay()
-		})
-		$("body,html").scrollTop(0);
-	},
-
-	searchHandler: function(event){
-		var params = this._getParamsFromInputs()
-		var searchResults;
-		var logId;
-
-		this.dispoService.search(params)
-			.then((rooms) => {
-				searchResults = rooms;
-				return this.dispoService.addLog(params)
-			})
-			.then((id) => {
-				logId = id;
-				return this.dispoService.findLogs()
-			})
-			.then((logs) => {
-				ViewController.fillLogs(logs)
-				ViewController.renderSearchResults(searchResults, logId);
-			})
-			.catch((e) => console.log(e));
 	},
 
 	favoriteHandler: function(event){
