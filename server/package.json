@@ -4,13 +4,14 @@
   "description": "Serveur express pour l'application OubliETS",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nicolas Cusson",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
+    "rxjs": "^5.5.8",
     "sqlite3": "^4.0.0"
   }
 }
