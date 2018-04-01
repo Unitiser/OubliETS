@@ -34,7 +34,6 @@ module.exports = class RoomService {
 
         var query = select + '\n' + groupBy + (havings.length ? '\n' + having + havings.join(' and '): "")
 
-        console.log(query);
         return Observable.bindNodeCallback(this.db.all.bind(this.db))(query);
     }
 
@@ -77,8 +76,7 @@ module.exports = class RoomService {
         if (value == undefined)
             return null
 
-        value = SqlString.escape(value)
-        let val = (operator === "LIKE") ? `%${value}%` : `${value}`
+        let val = (operator === "LIKE") ? SqlString.escape(`%${value}%`) : SqlString.escape(value)
         return `${field} ${operator} ` + val
     }
 }
