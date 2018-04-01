@@ -2,13 +2,19 @@ import "babel-polyfill"
 import {SqliteService} from './sqlite.service'
 import {DispoService} from './dispo.service'
 import {ViewController} from './view.controller'
+import {RessourceService} from './service/ressource.service'
+import {RoomService} from './service/room.service'
+import {SoftwareService} from './service/software.service'
 
 var app = {
 	// Application Constructor
 	initialize: function() {
-		this.sqliteService = new SqliteService('dispo.db')
-		this.dispoService = new DispoService(this.sqliteService)
-
+		// this.sqliteService = new SqliteService('dispo.db')
+		// this.dispoService = new DispoService(this.sqliteService)
+		this.dispoService = {}
+		this.ressourceService = new RessourceService();
+		this.roomService = new RoomService();
+		this.softwareService = new SoftwareService();
 
 		ViewController.show("search")
 
@@ -20,22 +26,18 @@ var app = {
 		});
 
 		// App launch data
-		var self = this;
-		this.sqliteService.ready().then(() => {
-			this.dispoService.findAccesses().then((res) => { ViewController.fillAccesses(res)})
-			this.dispoService.findResources().then((res) => { ViewController.fillResources(res)})
-			this.dispoService.findSoftwares().then((res) => { ViewController.fillSoftwares(res)})
-			this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
-			this.dispoService.findLogs().then((res) => { 
-				if(res.length){
-					self._fillParamsInput(self._getParamsFromSearchItem(res[0]))
-				}else{
-					self._clearParamsInput()
-				}
-				ViewController.fillLogs(res)
-
-			})
-		})
+		this.ressourceService.list().then((res) => { ViewController.fillResources(res)})
+		this.roomService.listAccess().then((res) => { ViewController.fillAccesses(res)})
+		this.softwareService.list().then((res) => { ViewController.fillSoftwares(res)})
+		// this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
+		// this.dispoService.findLogs().then((res) => { 
+		// 	if(res.length){
+		// 		this._fillParamsInput(this._getParamsFromSearchItem(res[0]))
+		// 	}else{
+		// 		this._clearParamsInput()
+		// 	}
+		// 	ViewController.fillLogs(res)
+		// })
 
 		// Events
 		$('[name="button-search"]').click(this.searchHandler.bind(this));
