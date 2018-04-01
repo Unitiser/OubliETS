@@ -1,14 +1,11 @@
 {
   "name": "oubliets",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "emulator": "npm run webpack && cordova run --emulator",
-    "device": "npm run webpack && cordova run --device",
     "webpack": "webpack",
     "webpack-watch": "webpack --watch",
-    "emulator-live-reload" : "cordova run --emulator -- --live-reload",
     "linter": "jshint src/js/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

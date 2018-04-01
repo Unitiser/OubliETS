@@ -18,13 +18,5 @@ module.exports = {
             }
         ]
     },
-    plugins: [
-        new CopyWebpackPlugin([
-            { from: 'src/css', to: '../css' },
-            { from: 'src/img', to: '../img' },
-            { from: 'src/js/lib', to: 'lib' },
-            { from: 'src/dispo.db', to: '../' },
-            { from: 'src/index.html', to: '../' }
-        ])
-    ]
+    plugins: []
 };
