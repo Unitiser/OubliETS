@@ -9,7 +9,7 @@ let LOCAL_REGEX = /^[ABE]-[0-9]{4}$/;
 let CLASS_REGEX = /^[A-Z]{3}[0-9]{3}$/;
 
 var DATA = {};
-var db = new sqlite3.Database('../oubliets/src/dispo.db');
+var db = new sqlite3.Database('dispo.db');
 
 var pdfs = fs.readdirSync('./pdfs/');
 parseNext();
@@ -24,7 +24,7 @@ function parseNext() {
         //pdf = "Horaires_Gen_E17.pdf";
         console.log('Parsing', pdf);
         pdfParser.loadPDF('./pdfs/' + pdf);
-        setTimeout( () => { parseNext(); }, 1000);
+        setTimeout( () => { parseNext(); }, 5000);
     }
 }
 
@@ -107,6 +107,7 @@ function parsePdfData(pdfData) {
             }
 
             if(isLocal) {
+                console.log(forType);
 
                 // for multi local lines, i.e 'A-0610, A-3608'
                 forLocals = text.split(', ');
@@ -144,7 +145,7 @@ function insertData(local, day, period, classSigil) {
                     DATA[local][day].splice(index, 1); // remove the time from available hours
             }
             DATA[local][day].sort((a,b) => parseInt(a) > parseInt(b));
-            console.log(`Removing '${period}' for day '${day}' for class '${classSigil}' to local '${local}'`);
+            // console.log(`Removing '${period}' for day '${day}' for class '${classSigil}' to local '${local}'`);
         }
     }
 }
@@ -226,9 +227,13 @@ function insertDataIntoDb() {
                     //console.log(`Selecting: SELECT idTimeslot FROM timeslots WHERE day=${day} AND startTime=${freeHour}`);
                     db.get(`SELECT idTimeslot FROM timeslots WHERE day=${day} AND startTime=${freeHour}`, (err, row) => {
                         if(row) {
-                            let insertRoomSlotSql = `INSERT INTO room_timeslot (idRoom, idTimeslot) VALUES (${idRoom},${row.idTimeslot})`;
-                            console.log(insertRoomSlotSql);
-                            db.run(insertRoomSlotSql);
+                            try{
+                                let insertRoomSlotSql = `INSERT INTO room_timeslot (idRoom, idTimeslot) VALUES (${idRoom},${row.idTimeslot})`;
+                                console.log(insertRoomSlotSql);
+                                db.run(insertRoomSlotSql);
+                            } catch(e) {
+                                console.log(e);
+                            }
                         }
                     });
                 }
