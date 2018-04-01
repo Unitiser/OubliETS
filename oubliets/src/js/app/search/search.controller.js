@@ -41,20 +41,25 @@ export class SearchController{
         var searchResults;
         var logId;
 
-        this.dispoService.search(params)
-            .then((rooms) => {
-                searchResults = rooms;
-                return this.dispoService.addLog(params)
+        this.roomService.search(params)
+            .then((res) => {
+                console.log(res);
             })
-            .then((id) => {
-                logId = id;
-                return this.dispoService.findLogs()
-            })
-            .then((logs) => {
-                ViewController.fillLogs(logs)
-                ViewController.renderSearchResults(searchResults, logId);
-            })
-            .catch((e) => console.log(e));
+            .catch((e) => console.log(e))
+        // this.dispoService.search(params)
+        //     .then((rooms) => {
+        //         searchResults = rooms;
+        //         return this.dispoService.addLog(params)
+        //     })
+        //     .then((id) => {
+        //         logId = id;
+        //         return this.dispoService.findLogs()
+        //     })
+        //     .then((logs) => {
+        //         ViewController.fillLogs(logs)
+        //         ViewController.renderSearchResults(searchResults, logId);
+        //     })
+        //     .catch((e) => console.log(e));
     }
 
     _getParamsFromInputs() {

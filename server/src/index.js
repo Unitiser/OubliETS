@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 
 // Constants
 const APP_DIRECTORY = '../oubliets/dist/';
@@ -12,6 +13,7 @@ const SoftwareService = new (require('./db/software.service.js'))(db);
 
 // Init static server
 app.use("/", express.static(APP_DIRECTORY));
+app.use(bodyParser.json());
 
 // Init APIs
 const SearchAPI = new (require('./api/search.api.js'))(app, db);

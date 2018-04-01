@@ -10,8 +10,10 @@
   "author": "Nicolas Cusson",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "rxjs": "^5.5.8",
-    "sqlite3": "^4.0.0"
+    "sqlite3": "^4.0.0",
+    "sqlstring": "^2.3.1"
   }
 }
