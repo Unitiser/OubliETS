@@ -7,6 +7,7 @@ import {RoomService} from './service/room.service'
 import {SoftwareService} from './service/software.service'
 
 import { SearchController } from './search/search.controller'
+import { ResultController } from './result/result.controller'
 
 var app = {
 	// Application Constructor
@@ -17,15 +18,6 @@ var app = {
 		this.ressourceService = new RessourceService();
 		this.roomService = new RoomService();
 		this.softwareService = new SoftwareService();
-
-		ViewController.show("search")
-
- 		// Hookup functionalities
-		$(".navbar-item a").click((event) => {
-			event.preventDefault();
-			let targetName = event.target.attributes.href.value.replace("#", "");
-			ViewController.show(targetName);
-		});
 
 		// App launch data
 
@@ -40,10 +32,14 @@ var app = {
 		// })
 		
 		// Init controllers
+		let viewCtrl = new ViewController();
 		let searchCtrl = new SearchController(this.roomService,
 											  this.softwareService,
 											  this.ressourceService,
 											  undefined);
+		let resultCtrl = new ResultController(this.roomService);
+
+		$(document).trigger('application:show', ['search']);
 
 		// Events
 		
@@ -51,10 +47,7 @@ var app = {
 		$('[name="button-favorite"]').click(this.favoriteHandler.bind(this));
 		$('[name="button-clear-favorites"]').click(this.clearFavoritesHandler.bind(this));
 		$('[name="button-clear-logs"]').click(this.clearLogsHandler.bind(this));
-		$("#results-list").on("click", ".result-item", event => {
-			const id = $(event.target).closest('.result-item').attr("data-id");
-			this.showResultItemHandler.call(this, id);
-		});
+
 		$("#favorites-list").on("click", ".list-item-label, .list-item-load", event => {
 			const id = $(event.target).closest('.list-item').attr("data-id");
 			this.searchFromFavoriteHandler.call(this, id);
@@ -91,20 +84,6 @@ var app = {
 			.catch((err) => {
 				console.log(err)
 			});
-	},
-
-	showResultItemHandler: function(id){
-		var resultItem = $("#results-list [data-id="+id+"]");
-
-		if (resultItem.attr("data-show") === "false") {
-			this.dispoService.findResourcesForRoom(id).then((res) => { ViewController.renderRoomResources(resultItem, res)})
-			this.dispoService.findTimeslotsForRoom(id).then((res) => { ViewController.renderRoomTimeslots(resultItem, res)})
-			resultItem.attr("data-show", "true");
-		} else {
-			ViewController.unrenderRoomResources(resultItem);
-			ViewController.unrenderRoomTimeslots(resultItem);
-			resultItem.attr("data-show", "false");
-		}
 	},
 
 	clearFavoritesHandler: function(event){

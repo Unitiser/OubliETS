@@ -13,6 +13,22 @@ module.exports = class RoomService {
         return Observable.bindNodeCallback(this.listAccessStmt.all.bind(this.listAccessStmt))();
     }
 
+    findResourcesForRoom(idRoom) {
+        var query = `select r.idRessource, r.name
+            from ressources r, room_ressource rr
+            where r.idRessource = rr.idRessource
+            and rr.idRoom = ${SqlString.escape(idRoom)}`
+        return Observable.bindNodeCallback(this.db.all.bind(this.db))(query);
+    }
+
+    findTimeslotsForRoom(idRoom) {
+        var query = `select t.idTimeslot, t.day, t.startTime, t.endTime
+            from timeslots t, room_timeslot rt
+            where t.idTimeslot = rt.idTimeslot
+            and rt.idRoom = ${SqlString.escape(idRoom)}`
+        return Observable.bindNodeCallback(this.db.all.bind(this.db))(query);
+    }
+
     search(params) {
         // TODO: This way of building the query is quite horrible ... we should probably find something better.
         var select = `select r.idRoom, r.name, r.type, t.day, t.startTime, t.endTime, group_concat(so.name) as sof, group_concat(re.name) as res from rooms as r

@@ -12,7 +12,6 @@ export class SearchController{
 
     // Public stuff
     initialize(){
-        console.log("Running initialize");
         // Load the display data
         this.ressourceService.list().then((res) => { SearchPresenter.fillResources(res)})
         this.roomService.listAccess().then((res) => { SearchPresenter.fillAccesses(res)})
@@ -43,7 +42,8 @@ export class SearchController{
 
         this.roomService.search(params)
             .then((res) => {
-                console.log(res);
+                // TODO: Log search
+                $(document).trigger("search:result", [res])
             })
             .catch((e) => console.log(e))
         // this.dispoService.search(params)
