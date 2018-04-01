@@ -107,8 +107,6 @@ function parsePdfData(pdfData) {
             }
 
             if(isLocal) {
-                console.log(forType);
-
                 // for multi local lines, i.e 'A-0610, A-3608'
                 forLocals = text.split(', ');
                 for(var local of forLocals) {
