@@ -1,10 +1,10 @@
 import {Labels} from "../labels"
 
 export class ResultPresenter {
-    static renderSearchResults(searchResults, idLog){
+    static renderSearchResults(searchResults, params){
         var display = "";
         $("#results-list").empty();
-        $("#results-list").attr("data-id", idLog)
+        $("#results-list").attr("data-params", JSON.stringify(params))
 
         if(!searchResults.length) display = `<p>${Labels.noResults}</p>`;
 

@@ -12,10 +12,12 @@ export class ResultController {
             const id = $(event.target).closest('.result-item').attr("data-id");
             this.showResultItemHandler.call(this, id);
         });
+
+        $('[name="button-favorite"]').click(this.handleAddFavorite.bind(this));
     }
 
-    handleSearchResult(event, results) {
-        ResultPresenter.renderSearchResults(results, undefined);
+    handleSearchResult(event, results, params) {
+        ResultPresenter.renderSearchResults(results, params);
         $(document).trigger('application:show', ['results']);
     }
 
@@ -31,5 +33,11 @@ export class ResultController {
             ResultPresenter.unrenderRoomTimeslots(resultItem);
             resultItem.attr("data-show", "false");
         }
+    }
+
+    handleAddFavorite(event) {
+        console.log("Add favorites")
+        let params = JSON.parse($('#results-list').attr('data-params'));
+        $(document).trigger('favorite:add', [params]);
     }
 }

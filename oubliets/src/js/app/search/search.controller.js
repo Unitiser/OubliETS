@@ -27,8 +27,6 @@ export class SearchController{
         });
 
         $(document).on('search:prefill', (e, params) => {
-            console.log("prefill?");
-            console.log(params)
             this.fillParamsInput(params);
         });
     }
@@ -54,7 +52,7 @@ export class SearchController{
         this.roomService.search(params)
             .then((res) => {
                 if(!skipLog) this.logService.add(params)
-                $(document).trigger("search:result", [res])
+                $(document).trigger("search:result", [res, params])
             })
             .catch((e) => console.log(e));
     }
