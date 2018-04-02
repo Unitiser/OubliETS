@@ -16,7 +16,6 @@ app.use("/", express.static(APP_DIRECTORY));
 app.use(bodyParser.json());
 
 // Init APIs
-const SearchAPI = new (require('./api/search.api.js'))(app, db);
 const RoomAPI = new (require('./api/room.api.js'))(app, RoomService);
 const RessourceAPI = new (require('./api/ressource.api.js'))(app, RessourceService);
 const SoftwareAPI = new (require('./api/software.api.js'))(app, SoftwareService);

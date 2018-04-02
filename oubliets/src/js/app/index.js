@@ -5,9 +5,11 @@ import {ViewController} from './view.controller'
 import {RessourceService} from './service/ressource.service'
 import {RoomService} from './service/room.service'
 import {SoftwareService} from './service/software.service'
+import {LogService} from './service/log.service'
 
 import { SearchController } from './search/search.controller'
 import { ResultController } from './result/result.controller'
+import { LogController } from './log/log.controller'
 
 var app = {
 	// Application Constructor
@@ -18,7 +20,7 @@ var app = {
 		this.ressourceService = new RessourceService();
 		this.roomService = new RoomService();
 		this.softwareService = new SoftwareService();
-
+		this.logService = new LogService();
 		// App launch data
 
 		// this.dispoService.findFavorites().then((res) => { ViewController.fillFavorites(res)})
@@ -36,8 +38,9 @@ var app = {
 		let searchCtrl = new SearchController(this.roomService,
 											  this.softwareService,
 											  this.ressourceService,
-											  undefined);
+											  this.logService);
 		let resultCtrl = new ResultController(this.roomService);
+		let logCtrl = new LogController(this.logService);
 
 		$(document).trigger('application:show', ['search']);
 
@@ -46,7 +49,7 @@ var app = {
 		// Favorite stuff
 		$('[name="button-favorite"]').click(this.favoriteHandler.bind(this));
 		$('[name="button-clear-favorites"]').click(this.clearFavoritesHandler.bind(this));
-		$('[name="button-clear-logs"]').click(this.clearLogsHandler.bind(this));
+		
 
 		$("#favorites-list").on("click", ".list-item-label, .list-item-load", event => {
 			const id = $(event.target).closest('.list-item').attr("data-id");
@@ -55,20 +58,6 @@ var app = {
 		$("#favorites-list").on("click", ".list-item-remove", event => {
 			const id = $(event.target).parent().parent().attr("data-id");
 			this.removeFavoriteHandler.call(this, id);
-		});
-
-		// Log stuff
-		$("#logs-list").on("click", ".list-item-label, .list-item-load", event => {
-			const id = $(event.target).closest('.list-item').attr("data-id");
-			this.searchFromLogHandler.call(this, id);
-		});
-		$("#logs-list").on("click", ".list-item-remove", event => {
-			const id = $(event.target).parent().parent().attr("data-id");
-			this.removeLogHandler.call(this, id);
-		});
-		$("#logs-list, #favorites-list").on("click", ".list-item-edit", event => {
-			const id = $(event.target).parent().parent().attr("data-id");
-			this.editHandler.call(this, id);
 		});
 	},
 
@@ -138,24 +127,6 @@ var app = {
 						ViewController.renderSearchResults(res, id);
 					});
 			});
-	},
-
-	searchFromLogHandler: function(id){
-		this.dispoService.findLog(id)
-			.then((logs) => {
-				this.dispoService.search(this._getParamsFromSearchItem(logs[0]))
-					.then((res) => {
-						ViewController.renderSearchResults(res, id);
-					});
-			});
-	},
-
-	editHandler : function(id){
-		this.dispoService.findLog(id)
-			.then((res) => {
-				this._fillParamsInput(res[0])
-				ViewController.show("search")
-			})
 	}
 };
 

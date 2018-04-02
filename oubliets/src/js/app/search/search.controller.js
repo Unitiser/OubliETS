@@ -19,7 +19,18 @@ export class SearchController{
 
         // Register the jQuery events
         $('[name="button-search"]').click(this._searchHandler.bind(this))
-        $("#clear-search").click(this._clearParamsInput.bind(this))
+        $('#clear-search').click(this._clearParamsInput.bind(this))
+        
+        $(document).on('search:prefillAndSearch', (e, params) => { 
+            this.fillParamsInput(params);
+            this._searchHandler(e, true);
+        });
+
+        $(document).on('search:prefill', (e, params) => {
+            console.log("prefill?");
+            console.log(params)
+            this.fillParamsInput(params);
+        });
     }
 
     fillParamsInput(params){
@@ -35,31 +46,17 @@ export class SearchController{
     }
 
     // Event handlers
-    _searchHandler(event){
+    _searchHandler(event, skipLog){
         var params = this._getParamsFromInputs()
         var searchResults;
         var logId;
 
         this.roomService.search(params)
             .then((res) => {
-                // TODO: Log search
+                if(!skipLog) this.logService.add(params)
                 $(document).trigger("search:result", [res])
             })
-            .catch((e) => console.log(e))
-        // this.dispoService.search(params)
-        //     .then((rooms) => {
-        //         searchResults = rooms;
-        //         return this.dispoService.addLog(params)
-        //     })
-        //     .then((id) => {
-        //         logId = id;
-        //         return this.dispoService.findLogs()
-        //     })
-        //     .then((logs) => {
-        //         ViewController.fillLogs(logs)
-        //         ViewController.renderSearchResults(searchResults, logId);
-        //     })
-        //     .catch((e) => console.log(e));
+            .catch((e) => console.log(e));
     }
 
     _getParamsFromInputs() {

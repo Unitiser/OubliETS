@@ -27,7 +27,7 @@ export class ViewController {
     handleNavbarClick(event){
         event.preventDefault();
         let targetName = event.target.attributes.href.value.replace("#", "");
-        this.show(null, targetName);
+        $(document).trigger('application:show', [targetName]);
     }
 	
     /*
@@ -98,14 +98,6 @@ export class ViewController {
             </div>
         </div>`
     }
-
-	static unrenderLogs() {
-		$('#logs-list').find(".log-item").remove();
-	}
-
-	static unrenderLog(id){
-		$('#logs-list').find("[data-id="+id+"]").remove();
-	}
 
     static unrenderFavorites() {
         $('#favorites-list').find(".favorite-item").remove();
