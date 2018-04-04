@@ -20,4 +20,4 @@ const RoomAPI = new (require('./api/room.api.js'))(app, RoomService);
 const RessourceAPI = new (require('./api/ressource.api.js'))(app, RessourceService);
 const SoftwareAPI = new (require('./api/software.api.js'))(app, SoftwareService);
 
-app.listen(3000, () => console.log('OubliETS listening on port 3000!'))
+app.listen(3000, () => console.log('OubliETS listening on port 3000!'));

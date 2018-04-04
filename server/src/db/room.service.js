@@ -37,18 +37,18 @@ module.exports = class RoomService {
             left join room_software as rs on rs.idRoom = r.idRoom
             left join room_ressource as rr on rr.idRoom = r.idRoom
             left join softwares as so on rs.idSoftware = so.idSoftware
-            left join ressources as re on rr.idRessource = re.idRessource `
-        var groupBy = ` group by r.name, t.day, t.startTime, t.endTime`
-        var having = ` having `
-        var havings = []
+            left join ressources as re on rr.idRessource = re.idRessource `;
+        var groupBy = ` group by r.name, t.day, t.startTime, t.endTime`;
+        var having = ` having `;
+        var havings = [];
 
         for(let key in params) {
-            let values = params[key]
-            let clause = this.getParamClause(this.getRealSearchField(key), values)
-            if (clause) havings.push(clause)
+            let values = params[key];
+            let clause = this.getParamClause(this.getRealSearchField(key), values);
+            if (clause) havings.push(clause);
         }
 
-        var query = select + '\n' + groupBy + (havings.length ? '\n' + having + havings.join(' and '): "")
+        var query = select + '\n' + groupBy + (havings.length ? '\n' + having + havings.join(' and '): "");
 
         return Observable.bindNodeCallback(this.db.all.bind(this.db))(query);
     }
@@ -62,37 +62,38 @@ module.exports = class RoomService {
             'start-time' : { 'field' : 't.startTime', 'operator' : '<=' },
             'end-time' : { 'field' : 't.endTime', 'operator' : '>=' },
             'room-type' : { 'field' : 'r.type', 'operator' : '=' },
-            'day-of-week' : { 'field' : 't.day', 'operator' : '=' },
-        }
-        return mapping[name]
+            'day-of-week' : { 'field' : 't.day', 'operator' : '=' }
+        };
+        return mapping[name];
     }
 
     getParamClause(fieldInfo, values) {
-        let clause
+        let clause;
         if (fieldInfo.type != undefined && fieldInfo.type == 'array') {
-            let c = []
+            let c = [];
 
             for(let val of values) {
-                let condition = this.getConditionClause(fieldInfo.field, fieldInfo.operator, val)
+                let condition = this.getConditionClause(fieldInfo.field, fieldInfo.operator, val);
                 if (condition != null)
-                    c.push(condition)
+                    c.push(condition);
             }
 
             if (c.length !== 0) {
-                clause = '(' + c.join(' ' + fieldInfo.arrayOperator + ' ') + ')'
+                clause = '(' + c.join(' ' + fieldInfo.arrayOperator + ' ') + ')';
             }
 
         } else {
-            clause = this.getConditionClause(fieldInfo.field, fieldInfo.operator, values)
+            clause = this.getConditionClause(fieldInfo.field, fieldInfo.operator, values);
         }
-        return clause
+        return clause;
     }
 
     getConditionClause(field, operator, value) {
-        if (value == undefined)
+        if (value == undefined){
             return null
+        }
 
-        let val = (operator === "LIKE") ? SqlString.escape(`%${value}%`) : SqlString.escape(value)
-        return `${field} ${operator} ` + val
+        let val = (operator === "LIKE") ? SqlString.escape(`%${value}%`) : SqlString.escape(value);
+        return `${field} ${operator} ` + val;
     }
 }

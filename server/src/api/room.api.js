@@ -23,7 +23,7 @@ module.exports = class RoomApi {
             .subscribe((r) => {
                 res.json(r)
             },
-            (err) => console.log(err))
+            (err) => console.log(err));
     }
 
     findResourcesForRoom(req, res) {
@@ -32,7 +32,7 @@ module.exports = class RoomApi {
             .subscribe((r) => {
                 res.json(r);
             },
-            (err) => console.log(err))
+            (err) => console.log(err));
     }
 
     findTimeslotsForRoom(req, res) {
@@ -41,6 +41,6 @@ module.exports = class RoomApi {
             .subscribe((r) => {
                 res.json(r);
             },
-            (err) => console.log(err))
+            (err) => console.log(err));
     }
 }

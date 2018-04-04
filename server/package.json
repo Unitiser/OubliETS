@@ -15,5 +15,8 @@
     "rxjs": "^5.5.8",
     "sqlite3": "^4.0.0",
     "sqlstring": "^2.3.1"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.5"
   }
 }
