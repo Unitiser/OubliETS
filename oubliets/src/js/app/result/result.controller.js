@@ -22,7 +22,7 @@ export class ResultController {
     }
 
     showResultItemHandler(id){
-        var resultItem = $('#results-list [data-id='+id+']');
+        let resultItem = $('#results-list [data-id='+id+']');
 
         if (resultItem.attr('data-show') === 'false') {
             this.roomService.findResourcesForRoom(id).then((res) => { 

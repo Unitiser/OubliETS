@@ -4,8 +4,8 @@ export class FavoritePresenter {
 
     static fillFavorites(favorites) {
         $('#favorites-list').find('.list-item').remove();
-        var display = '';
-        var fn = this.renderFavoriteEntry;
+        let display = '';
+        let fn = this.renderFavoriteEntry;
         
         $(favorites).each((i, item) => {
             display += fn(item);
@@ -15,9 +15,9 @@ export class FavoritePresenter {
     }
 
     static renderFavoriteEntry(item){
-        var id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
+        let id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
         ({id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-        var locals = '',
+        let locals = '',
             time = '';
 
         if (roomName || roomType) {

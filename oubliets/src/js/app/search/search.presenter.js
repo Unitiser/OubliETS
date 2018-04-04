@@ -23,8 +23,8 @@ export class SearchPresenter {
     }
 
     static _createLabelAndCheckbox(value, name) {
-        var id = `${name}_${value}_${Math.random().toString(36).substring(7)}`;
-        var span = $('<span></span>');
+        let id = `${name}_${value}_${Math.random().toString(36).substring(7)}`;
+        let span = $('<span></span>');
         span.append('<label for="' + id + '">' + name + '</label>');
         span.append('<input id="' + id + '" type="checkbox" value="' + value + '"/>');
         

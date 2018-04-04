@@ -51,7 +51,7 @@ export class FavoriteService{
 
     getAsParams(id) {
         let item = this.get(id);
-        var params = {};
+        let params = {};
         if (item !== undefined) {
             params['room-name'] = item.roomName;
             params['room-type'] = item.roomType;

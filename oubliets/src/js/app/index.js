@@ -13,7 +13,7 @@ import { ResultController } from './result/result.controller';
 import { LogController } from './log/log.controller';
 import { FavoriteController } from './favorite/favorite.controller';
 
-var app = {
+let app = {
     // Application Constructor
     initialize: function() {
         this.dispoService = {};

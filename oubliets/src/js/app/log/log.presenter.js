@@ -4,8 +4,8 @@ export class LogPresenter{
 
     static fillLogs(logs) {
         $('#logs-list').find('.list-item').remove();
-        var display = '';
-        var fn = this.renderLogEntry;
+        let display = '';
+        let fn = this.renderLogEntry;
         
         $(logs).each((i, item) => {
             display += fn(item);
@@ -15,9 +15,9 @@ export class LogPresenter{
     }
 
     static renderLogEntry(item){
-        var id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
+        let id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
         ({id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
-        var locals = '',
+        let locals = '',
             time = '';
 
         if (roomName || roomType) {

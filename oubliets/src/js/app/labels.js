@@ -1,4 +1,4 @@
-export var Labels = {
+export let Labels = {
     roomTypeMap : {
         'lab' : 'Laboratoire',
         'classroom' : 'Salle de classe'

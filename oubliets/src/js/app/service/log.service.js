@@ -51,7 +51,7 @@ export class LogService{
 
     getAsParams(id) {
         let item = this.get(id);
-        var params = {};
+        let params = {};
 
         if (item !== undefined) {
             params['room-name'] = item.roomName;
