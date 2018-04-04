@@ -1,14 +1,14 @@
-import {Labels} from "../labels"
+import {Labels} from '../labels';
 
-export class FavoritePresenter{
+export class FavoritePresenter {
 
     static fillFavorites(favorites) {
-        $('#favorites-list').find(".list-item").remove();
-        var display = "";
-        var fn = this.renderFavoriteEntry
+        $('#favorites-list').find('.list-item').remove();
+        var display = '';
+        var fn = this.renderFavoriteEntry;
         
         $(favorites).each((i, item) => {
-            display += fn(item)
+            display += fn(item);
         });
 
         $('#favorites-list').append(display);
@@ -18,20 +18,20 @@ export class FavoritePresenter{
         var id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
         ({id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
         var locals = '',
-            time = ''
+            time = '';
 
         if (roomName || roomType) {
             locals = `<p>
-                        Local ${!roomName ? "" : roomName + " "}${!roomType ? "" : roomType}
-                     </p>`
+                        Local ${!roomName ? '' : roomName + ' '}${!roomType ? '' : roomType}
+                     </p>`;
         }
 
         if (timeslotStartTime && timeslotEndTime){
-            time = `de ${timeslotStartTime}h00 à ${timeslotEndTime}h00`
+            time = `de ${timeslotStartTime}h00 à ${timeslotEndTime}h00`;
         }else if(timeslotStartTime){
-            time = `à partir de ${timeslotStartTime}h00`
+            time = `à partir de ${timeslotStartTime}h00`;
         }else if(timeslotEndTime){
-            time = `avant ${timeslotEndTime}h00`
+            time = `avant ${timeslotEndTime}h00`;
         }
 
         return `<div class="list-item" data-id="${id}">
@@ -44,6 +44,6 @@ export class FavoritePresenter{
                 ${locals}
                 <p>${Labels.day[timeslotDay]} ${time}</p>
             </div>
-        </div>`
+        </div>`;
     }
 }

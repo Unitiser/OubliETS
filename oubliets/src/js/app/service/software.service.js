@@ -1,6 +1,6 @@
 export class SoftwareService{
     constructor(){
-        this.SOFTWARE_LIST = "/softwares";
+        this.SOFTWARE_LIST = '/softwares';
     }
 
     list() {

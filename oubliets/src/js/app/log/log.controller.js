@@ -1,4 +1,4 @@
-import {LogPresenter} from './log.presenter'
+import {LogPresenter} from './log.presenter';
 
 export class LogController{
     constructor(logService) {
@@ -8,21 +8,21 @@ export class LogController{
 
     intialize(){
         $(document).on('application:show', (e, name) => {
-            if(name == 'history') this.showLogsHandler();
-        })
+            if(name === 'history') this.showLogsHandler();
+        });
 
-        $("#logs-list").on("click", ".list-item-label, .list-item-load", event => {
-            const id = $(event.target).closest('.list-item').attr("data-id");
+        $('#logs-list').on('click', '.list-item-label, .list-item-load', event => {
+            const id = $(event.target).closest('.list-item').attr('data-id');
             this.searchFromLogHandler.call(this, id);
         });
 
-        $("#logs-list").on("click", ".list-item-remove", event => {
-            const id = $(event.target).parent().parent().attr("data-id");
+        $('#logs-list').on('click', '.list-item-remove', event => {
+            const id = $(event.target).parent().parent().attr('data-id');
             this.removeLogHandler.call(this, id);
         });
 
-        $("#logs-list, #favorites-list").on("click", ".list-item-edit", event => {
-            const id = $(event.target).parent().parent().attr("data-id");
+        $('#logs-list, #favorites-list').on('click', '.list-item-edit', event => {
+            const id = $(event.target).parent().parent().attr('data-id');
             this.editHandler.call(this, id);
         });
 
@@ -43,10 +43,10 @@ export class LogController{
         console.log(params);
 
         $(document).trigger('search:prefill', [params]);
-        $(document).trigger('application:show', ["search"]);
+        $(document).trigger('application:show', ['search']);
     }
 
-    clearLogsHandler(event){
+    clearLogsHandler(){
         this.logService.clear();
         this.showLogsHandler();
     }

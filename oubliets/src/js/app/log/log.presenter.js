@@ -1,14 +1,14 @@
-import {Labels} from "../labels"
+import {Labels} from '../labels';
 
 export class LogPresenter{
 
     static fillLogs(logs) {
-        $('#logs-list').find(".list-item").remove();
-        var display = "";
-        var fn = this.renderLogEntry
+        $('#logs-list').find('.list-item').remove();
+        var display = '';
+        var fn = this.renderLogEntry;
         
         $(logs).each((i, item) => {
-            display += fn(item)
+            display += fn(item);
         });
 
         $('#logs-list').append(display);
@@ -18,20 +18,20 @@ export class LogPresenter{
         var id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime;
         ({id, roomName, roomType, timeslotDay, timeslotStartTime, timeslotEndTime} = item);
         var locals = '',
-            time = ''
+            time = '';
 
         if (roomName || roomType) {
             locals = `<p>
-                        Local ${!roomName ? "" : roomName + " "}${!roomType ? "" : roomType}
-                     </p>`
+                        Local ${!roomName ? '' : roomName + ' '}${!roomType ? '' : roomType}
+                     </p>`;
         }
 
         if (timeslotStartTime && timeslotEndTime){
-            time = `de ${timeslotStartTime}h00 à ${timeslotEndTime}h00`
+            time = `de ${timeslotStartTime}h00 à ${timeslotEndTime}h00`;
         }else if(timeslotStartTime){
-            time = `à partir de ${timeslotStartTime}h00`
+            time = `à partir de ${timeslotStartTime}h00`;
         }else if(timeslotEndTime){
-            time = `avant ${timeslotEndTime}h00`
+            time = `avant ${timeslotEndTime}h00`;
         }
 
         return `<div class="list-item" data-id="${id}">
@@ -44,6 +44,6 @@ export class LogPresenter{
                 ${locals}
                 <p>${Labels.day[timeslotDay]} ${time}</p>
             </div>
-        </div>`
+        </div>`;
     }
 }

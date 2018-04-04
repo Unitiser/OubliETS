@@ -15,14 +15,14 @@ export class RoomService{
             data : JSON.stringify(params),
             contentType : 'application/json',
             type : 'POST'
-        })
+        });
     }
 
     findResourcesForRoom(idRoom) {
-        return $.getJSON(this.RESSOURSES_FOR_ROOM.replace(':id', idRoom))
+        return $.getJSON(this.RESSOURSES_FOR_ROOM.replace(':id', idRoom));
     }
 
     findTimeslotsForRoom(idRoom) {
-        return $.getJSON(this.TIMESLOTS_FOR_ROOM.replace(':id', idRoom))
+        return $.getJSON(this.TIMESLOTS_FOR_ROOM.replace(':id', idRoom));
     }
 }

@@ -1,4 +1,4 @@
-import {FavoritePresenter} from './favorite.presenter'
+import {FavoritePresenter} from './favorite.presenter';
 
 export class FavoriteController{
     constructor(favoriteService) {
@@ -8,23 +8,23 @@ export class FavoriteController{
 
     intialize(){
         $(document).on('application:show', (e, name) => {
-            if(name == 'favorites') this.showFavoritesHandler();
-        })
+            if(name === 'favorites') this.showFavoritesHandler();
+        });
 
-        $(document).on('favorite:add', this.addFavoriteHandler.bind(this))
+        $(document).on('favorite:add', this.addFavoriteHandler.bind(this));
 
-        $("#favorites-list").on("click", ".list-item-label, .list-item-load", event => {
-            const id = $(event.target).closest('.list-item').attr("data-id");
+        $('#favorites-list').on('click', '.list-item-label, .list-item-load', event => {
+            const id = $(event.target).closest('.list-item').attr('data-id');
             this.searchFromFavoriteHandler.call(this, id);
         });
 
-        $("#favorites-list").on("click", ".list-item-remove", event => {
-            const id = $(event.target).parent().parent().attr("data-id");
+        $('#favorites-list').on('click', '.list-item-remove', event => {
+            const id = $(event.target).parent().parent().attr('data-id');
             this.removeFavoriteHandler.call(this, id);
         });
 
-        $("#favorites-list, #favorites-list").on("click", ".list-item-edit", event => {
-            const id = $(event.target).parent().parent().attr("data-id");
+        $('#favorites-list, #favorites-list').on('click', '.list-item-edit', event => {
+            const id = $(event.target).parent().parent().attr('data-id');
             this.editHandler.call(this, id);
         });
 
@@ -32,7 +32,6 @@ export class FavoriteController{
     }
 
     addFavoriteHandler(event, params){
-        console.log('Add favorites handles')
         this.favoriteService.add(params);
         $(document).trigger('application:show', ['favorites']);
     }
@@ -50,10 +49,10 @@ export class FavoriteController{
         let params = this.favoriteService.getAsParams(id);
 
         $(document).trigger('search:prefill', [params]);
-        $(document).trigger('application:show', ["search"]);
+        $(document).trigger('application:show', ['search']);
     }
 
-    clearFavoritesHandler(event){
+    clearFavoritesHandler(){
         this.favoriteService.clear();
         this.showFavoritesHandler();
     }

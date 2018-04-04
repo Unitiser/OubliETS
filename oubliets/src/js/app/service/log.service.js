@@ -15,9 +15,9 @@ export class LogService{
             timeslotDay: params['day-of-week'],
             timeslotStartTime: params['start-time'],
             timeslotEndTime: params['end-time'],
-            accesses: params['accesses'],
-            resources: params['resources'],
-            softwares: params['softwares']
+            accesses: params.accesses,
+            resources: params.resources,
+            softwares: params.softwares
         };
 
         this.logs.push(log);
@@ -52,16 +52,22 @@ export class LogService{
     getAsParams(id) {
         let item = this.get(id);
         var params = {};
-        console.log(id, item, this.logs)
+
         if (item !== undefined) {
-            params['room-name'] = item.roomName
-            params['room-type'] = item.roomType
-            params['day-of-week'] = item.timeslotDay
-            params['start-time'] = item.timeslotStartTime
-            params['end-time'] = item.timeslotEndTime
-            if (item.accesses !== undefined && item.accesses !== "") params['accesses'] = item.accesses
-            if (item.resources !== undefined && item.resources !== "") params['resources'] = item.resources
-            if (item.softwares !== undefined && item.softwares !== "") params['softwares'] = item.softwares
+            params['room-name'] = item.roomName;
+            params['room-type'] = item.roomType;
+            params['day-of-week'] = item.timeslotDay;
+            params['start-time'] = item.timeslotStartTime;
+            params['end-time'] = item.timeslotEndTime;
+            if (item.accesses !== undefined && item.accesses !== '') {
+                params.accesses = item.accesses;
+            }
+            if (item.resources !== undefined && item.resources !== '') {
+                params.resources = item.resources;
+            }
+            if (item.softwares !== undefined && item.softwares !== '') {
+                params.softwares = item.softwares;
+            }
         }
 
         return params;

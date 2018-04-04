@@ -6,7 +6,7 @@
   "scripts": {
     "webpack": "webpack",
     "webpack-watch": "webpack --watch",
-    "linter": "jshint src/js/**/*.js",
+    "linter": "jshint src/js/**/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -1,16 +1,16 @@
-import {Labels} from "../labels"
+import {Labels} from '../labels';
 
 export class ResultPresenter {
     static renderSearchResults(searchResults, params){
-        var display = "";
-        $("#results-list").empty();
-        $("#results-list").attr("data-params", JSON.stringify(params))
+        let display = '';
+        $('#results-list').empty();
+        $('#results-list').attr('data-params', JSON.stringify(params));
 
         if(!searchResults.length) display = `<p>${Labels.noResults}</p>`;
 
         $(searchResults).each((i, item) => {
-            var idRoom, type, name, startTime, endTime;
-            ({idRoom, type, name, startTime, endTime} = item); // L33t destructuring assignment, a new ES6 kewl feature
+            let idRoom, type, name, startTime, endTime;
+            ({idRoom, type, name, startTime, endTime} = item);
 
             display += `<div class="result-item" data-show="false" data-id="${idRoom}">
                             <h3>${name} : ${Labels.roomTypeMap[type]}</h3>
@@ -18,14 +18,14 @@ export class ResultPresenter {
                         </div>`;
         });
 
-        $("#results-list").append($(display));
+        $('#results-list').append($(display));
     }
 
     static renderRoomResources(resultItem, res){
         if ($(res).length > 0){
-            var display = `<br/><p>Ressource(s) :</p>`;
+            let display = `<br/><p>Ressource(s) :</p>`;
             $(res).each((i, item) => {
-                var idRessource, name;
+                let idRessource, name;
                 ({idRessource, name} = item);
                 display += `<p>${name}</p>`;
             });
@@ -34,14 +34,14 @@ export class ResultPresenter {
     }
 
     static unrenderRoomResources(resultItem){
-        resultItem.find(".roomResources").remove();
+        resultItem.find('.roomResources').remove();
     }
 
     static renderRoomTimeslots(resultItem, res){
-        if ($(res).length > 0){
-            var display = `<br/><p>Disponibilité(s) :</p>`;
+        if ($(res).length > 0) {
+            let display = `<br/><p>Disponibilité(s) :</p>`;
             $(res).each((i, item) => {
-                var idTimeslot, day, startTime, endTime;
+                let idTimeslot, day, startTime, endTime;
                 ({idTimeslot, day, startTime, endTime} = item);
                 display += `<p>${Labels.day[day]} de ${startTime}h00 à ${endTime}h00</p>`;
             });
@@ -50,6 +50,6 @@ export class ResultPresenter {
     }
 
     static unrenderRoomTimeslots(resultItem){
-        resultItem.find(".roomTimeslots").remove();
+        resultItem.find('.roomTimeslots').remove();
     }
 }

@@ -1,6 +1,6 @@
 export class RessourceService{
     constructor(){
-        this.RESSOURCE_LIST = "/ressources";
+        this.RESSOURCE_LIST = '/ressources';
     }
 
     list() {
