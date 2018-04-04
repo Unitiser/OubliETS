@@ -46,8 +46,6 @@ export class SearchController{
     // Event handlers
     _searchHandler(event, skipLog){
         var params = this._getParamsFromInputs()
-        var searchResults;
-        var logId;
 
         this.roomService.search(params)
             .then((res) => {

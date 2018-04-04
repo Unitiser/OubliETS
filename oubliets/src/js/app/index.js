@@ -23,14 +23,14 @@ var app = {
 		this.favoriteService = new FavoriteService();
 		
 		// Init controllers
-		let viewCtrl = new ViewController();
-		let searchCtrl = new SearchController(this.roomService,
+		new ViewController();
+		new SearchController(this.roomService,
 											  this.softwareService,
 											  this.ressourceService,
 											  this.logService);
-		let resultCtrl = new ResultController(this.roomService);
-		let logCtrl = new LogController(this.logService);
-		let favoriteCtrl = new FavoriteController(this.favoriteService);
+		new ResultController(this.roomService);
+		new LogController(this.logService);
+		new FavoriteController(this.favoriteService);
 
 		$(document).trigger('application:show', ['search']);
 	}
