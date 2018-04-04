@@ -6,7 +6,7 @@ module.exports = class RoomService {
     constructor(db) {
         this.db = db;
 
-        this.listAccessStmt = this.db.prepare("select distinct access from rooms");
+        this.listAccessStmt = this.db.prepare('select distinct access from rooms');
     }
 
     listAccess() {
@@ -17,7 +17,7 @@ module.exports = class RoomService {
         var query = `select r.idRessource, r.name
             from ressources r, room_ressource rr
             where r.idRessource = rr.idRessource
-            and rr.idRoom = ${SqlString.escape(idRoom)}`
+            and rr.idRoom = ${SqlString.escape(idRoom)}`;
         return Observable.bindNodeCallback(this.db.all.bind(this.db))(query);
     }
 
@@ -25,13 +25,13 @@ module.exports = class RoomService {
         var query = `select t.idTimeslot, t.day, t.startTime, t.endTime
             from timeslots t, room_timeslot rt
             where t.idTimeslot = rt.idTimeslot
-            and rt.idRoom = ${SqlString.escape(idRoom)}`
+            and rt.idRoom = ${SqlString.escape(idRoom)}`;
         return Observable.bindNodeCallback(this.db.all.bind(this.db))(query);
     }
 
     search(params) {
-        // TODO: This way of building the query is quite horrible ... we should probably find something better.
-        var select = `select r.idRoom, r.name, r.type, t.day, t.startTime, t.endTime, group_concat(so.name) as sof, group_concat(re.name) as res from rooms as r
+        var select = `select r.idRoom, r.name, r.type, t.day, t.startTime, t.endTime, 
+                group_concat(so.name) as sof, group_concat(re.name) as res from rooms as r
             left join room_timeslot as rt on r.idRoom = rt.idRoom
             left join timeslots as t on t.idTimeslot = rt.idTimeslot
             left join room_software as rs on rs.idRoom = r.idRoom
@@ -48,16 +48,28 @@ module.exports = class RoomService {
             if (clause) havings.push(clause);
         }
 
-        var query = select + '\n' + groupBy + (havings.length ? '\n' + having + havings.join(' and '): "");
-
+        let query = `
+            ${select}
+            ${groupBy}
+            ${(havings.length ? '\n' + having + havings.join(' and '): '')}
+        `;
         return Observable.bindNodeCallback(this.db.all.bind(this.db))(query);
     }
 
-    getRealSearchField(name){
+    getRealSearchField(name) {
         let mapping = {
-            'accesses': { 'field' : 'r.access', 'operator' : '=', 'type': 'array', 'arrayOperator': 'or'},
-            'resources': { 'field' : 'res', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
-            'softwares': { 'field' : 'sof', 'operator' : 'LIKE', 'type': 'array', 'arrayOperator': 'and'},
+            'accesses': { 
+                'field' : 'r.access', 'operator' : '=', 
+                'type': 'array', 'arrayOperator': 'or'
+            },
+            'resources': { 
+                'field' : 'res', 'operator' : 'LIKE', 'type': 'array', 
+                'arrayOperator': 'and'
+            },
+            'softwares': { 
+                'field' : 'sof', 'operator' : 'LIKE', 'type': 'array', 
+                'arrayOperator': 'and'
+            },
             'room-name' : { 'field' : 'r.name', 'operator' : 'LIKE' },
             'start-time' : { 'field' : 't.startTime', 'operator' : '<=' },
             'end-time' : { 'field' : 't.endTime', 'operator' : '>=' },
@@ -69,7 +81,7 @@ module.exports = class RoomService {
 
     getParamClause(fieldInfo, values) {
         let clause;
-        if (fieldInfo.type != undefined && fieldInfo.type == 'array') {
+        if (fieldInfo.type !== undefined && fieldInfo.type === 'array') {
             let c = [];
 
             for(let val of values) {
@@ -89,11 +101,11 @@ module.exports = class RoomService {
     }
 
     getConditionClause(field, operator, value) {
-        if (value == undefined){
-            return null
+        if (!value){
+            return null;
         }
 
-        let val = (operator === "LIKE") ? SqlString.escape(`%${value}%`) : SqlString.escape(value);
-        return `${field} ${operator} ` + val;
+        let val = (operator === '') ? SqlString.escape(`%${value}%`) : SqlString.escape(value);
+        return `${field} ${operator} ${val}`;
     }
-}
+};

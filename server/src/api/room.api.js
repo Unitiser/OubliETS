@@ -13,7 +13,7 @@ module.exports = class RoomApi {
         this.roomService.listAccess()
             .subscribe((rows) => {
                 res.json(rows);
-            }, (err) => res.sendStatus(500).send('Internal server error.'));
+            }, () => res.sendStatus(500).send('Internal server error.'));
 
     }
 
@@ -21,7 +21,7 @@ module.exports = class RoomApi {
         let params = req.body;
         this.roomService.search(params)
             .subscribe((r) => {
-                res.json(r)
+                res.json(r);
             },
             (err) => console.log(err));
     }
@@ -43,4 +43,4 @@ module.exports = class RoomApi {
             },
             (err) => console.log(err));
     }
-}
+};

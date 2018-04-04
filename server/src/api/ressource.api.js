@@ -10,7 +10,6 @@ module.exports = class RessourceApi {
         this.ressourceService.list()
             .subscribe((rows) => {
                 res.json(rows);
-            }, (err) => res.sendStatus(500).send('Internal server error.'));
-
+            }, () => res.sendStatus(500).send('Internal server error.'));
     }
-}
+};
