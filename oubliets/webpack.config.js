@@ -23,7 +23,9 @@ module.exports = {
             { from: 'src/css', to: '../css' },
             { from: 'src/img', to: '../img' },
             { from: 'src/js/lib', to: '../lib' },
-            { from: 'src/index.html', to: '../' }
+            { from: 'src/index.html', to: '../' },
+            { from: 'src/manifest.webmanifest', to: '../' },
+            { from: 'src/worker.js', to: '../' }
         ])
     ]
 };
